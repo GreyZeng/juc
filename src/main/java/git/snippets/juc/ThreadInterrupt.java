@@ -1,7 +1,11 @@
 package git.snippets.juc;
 
 import java.util.concurrent.TimeUnit;
-
+/**
+ * interrupt示例
+ * @author <a href="mailto:410486047@qq.com">Grey</a>
+ * @since 1.8
+ */
 public class ThreadInterrupt {
     public static void main(String[] args) throws InterruptedException {
         Thread t = new Thread(() ->{
