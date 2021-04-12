@@ -112,7 +112,9 @@ N = Ncpu * Ucpu * (1 + W/C)
 - TERMINATED
 > 线程执行完毕后，是这个状态
 
-## 待续
+## 线程状态切换
+
+![java_thread_state](https://img2020.cnblogs.com/blog/683206/202104/683206-20210412191009944-1947255770.png)
 
 
 ## 参考资料
