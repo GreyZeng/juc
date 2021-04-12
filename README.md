@@ -131,6 +131,61 @@ N = Ncpu * Ucpu * (1 + W/C)
 
 示例代码：ThreadInterrupt.java
 
+## 如何结束一个线程
+
+### 不推荐的方式
+
+- stop方法
+- suspend/resume方法
+  
+以上两种方式都不建议使用, 因为会产生数据不一致的问题，因为会释放所有的锁。
+
+### 优雅的方式
+
+如果不依赖循环的具体次数或者中间状态, 可以通过设置标志位的方式来控制
+
+```java
+public class ThreadFinished {
+    private static volatile boolean flag = true;
+    public static void main(String[] args) throws InterruptedException {
+
+        // 推荐方式:设置标志位
+        Thread t3 = new Thread(() -> {
+            long i = 0L;
+            while (flag) {
+                i++;
+            }
+            System.out.println("count sum i = " + i);
+        });
+        t3.start();
+        TimeUnit.SECONDS.sleep(1);
+        flag = false;
+    }
+}
+```
+
+如果要依赖循环的具体次数或者中间状态, 则可以用interrupt方式
+
+```java
+public class ThreadFinished {
+
+    public static void main(String[] args) throws InterruptedException {
+        // 推荐方式:使用interrupt
+        Thread t4 = new Thread(() -> {
+            while (!Thread.currentThread().isInterrupted()) {
+
+            }
+            System.out.println("t4 end");
+        });
+        t4.start();
+        TimeUnit.SECONDS.sleep(1);
+        t4.interrupt();
+    }
+}
+```
+
+示例代码: ThreadFinished.java
+
 ## 参考资料
 
 [多线程与高并发-马士兵](https://ke.qq.com/course/3132461?tuin=b09cbb87)
