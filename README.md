@@ -120,10 +120,10 @@ N = Ncpu * Ucpu * (1 + W/C)
 
 ## interrupt
 
-- interrupt() 
+- interrupt()
 > 打断某个线程(设置标志位)
 
-- isInterrupted() 
+- isInterrupted()
 > 查询某线程是否被打断过(查询标志位)
 
 - static interrrupted
