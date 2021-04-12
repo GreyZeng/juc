@@ -129,6 +129,7 @@ N = Ncpu * Ucpu * (1 + W/C)
 - static interrrupted
 > 查询当前线程是否被打断过，并重置打断标志位
 
+示例代码：ThreadInterrupt.java
 
 ## 参考资料
 
