@@ -118,6 +118,17 @@ N = Ncpu * Ucpu * (1 + W/C)
 
 ![java_thread_state](https://img2020.cnblogs.com/blog/683206/202104/683206-20210412191009944-1947255770.png)
 
+## interrupt
+
+- interrupt() 
+> 打断某个线程(设置标志位)
+
+- isInterrupted() 
+> 查询某线程是否被打断过(查询标志位)
+
+- static interrrupted
+> 查询当前线程是否被打断过，并重置打断标志位
+
 
 ## 参考资料
 
