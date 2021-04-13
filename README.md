@@ -223,6 +223,62 @@ public class ThreadFinished {
 示例代码: ThreadFinished.java
 
 
+## 并发编程的三大特性
+
+### 可见性
+
+每个线程会保存一份拷贝到线程本地缓存,使用volatile,可以保持线程之间数据可见性。
+
+注意: 
+- 如在上述代码的死循环中增加了System.out.println(), 则会强制同步flag的值,无论flag本身有没有加volatile。
+- 如果volatile修饰一个引用对象,如果对象的属性(成员变量)发生了改变,volatile不能保证其他线程可以观察到该变化, 
+
+如下示例: ThreadVisible.java
+
+```java
+public class ThreadVisible {
+    
+    static volatile   boolean  flag = true;
+    public static void main(String[] args) throws InterruptedException {
+        Thread t = new Thread(()->{
+            while(flag) {
+                // 如果这里调用了System.out.println()
+                // 会无论flag有没有加volatile,数据都会同步
+                // 因为System.out.println()背后调用的synchronized
+                // System.out.println();
+            }
+            System.out.println("t end");
+        });
+        t.start();
+        TimeUnit.SECONDS.sleep(3);
+        flag = false;
+
+
+        // volatile修饰引用变量
+        new Thread(a::m,"t2").start();
+        TimeUnit.SECONDS.sleep(2);
+        a.flag = false;
+
+        // 阻塞主线程,防止主线程直接执行完毕,看不到效果
+        new Scanner(System.in).next();
+    }
+    private static volatile A a = new A();
+    static class A {
+        boolean flag = true;
+        void m() {
+            System.out.println("m start");
+            while(flag){}
+            System.out.println("m end");
+        }   
+    }
+}
+```
+### 有序性
+
+### 原子性
+
+
+
 ## 参考资料
 
 [多线程与高并发-马士兵](https://ke.qq.com/course/3132461?tuin=b09cbb87)
