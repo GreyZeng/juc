@@ -118,6 +118,40 @@ N = Ncpu * Ucpu * (1 + W/C)
 
 ![java_thread_state](https://img2020.cnblogs.com/blog/683206/202104/683206-20210412191009944-1947255770.png)
 
+## 线程基本操作
+
+### sleep
+
+当前线程睡一段时间
+
+### yield
+
+这是一个静态方法，一旦执行，它会使当前线程让出一下CPU。但要注意，让出CPU并不表示当前线程不执行了。当前线程在让出CPU后，还会进行CPU资源的争夺，但是是否能够再次被分配到就不一定了。
+
+### join
+
+等待另外一个线程的结束，当前线程才会运行
+
+```java
+public class ThreadBasicOperation {
+    static volatile int sum = 0;
+
+    public static void main(String[] args) throws Exception {
+        Thread t = new Thread(()->{
+            for (int i = 1; i <= 100; i++) {
+                sum += i;
+            }
+        });
+        t.start();
+        // join 方法表示主线程愿意等待子线程执行完毕后才继续执行
+        // 如果不使用join方法，那么sum输出的可能是一个很小的值，因为还没等子线程
+        // 执行完毕后，主线程就已经执行了打印sum的操作
+        t.join();
+        System.out.println(sum);
+    }
+}
+```
+
 ## interrupt
 
 - interrupt()
@@ -185,6 +219,9 @@ public class ThreadFinished {
 ```
 
 示例代码: ThreadFinished.java
+
+## 线程的基本操作
+
 
 ## 参考资料
 
