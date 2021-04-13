@@ -229,10 +229,6 @@ public class ThreadFinished {
 
 每个线程会保存一份拷贝到线程本地缓存,使用volatile,可以保持线程之间数据可见性。
 
-注意: 
-- 如在上述代码的死循环中增加了System.out.println(), 则会强制同步flag的值,无论flag本身有没有加volatile。
-- 如果volatile修饰一个引用对象,如果对象的属性(成员变量)发生了改变,volatile不能保证其他线程可以观察到该变化, 
-
 如下示例: ThreadVisible.java
 
 ```java
@@ -273,6 +269,11 @@ public class ThreadVisible {
     }
 }
 ```
+
+代码说明: 
+- 如在上述代码的死循环中增加了System.out.println(), 则会强制同步flag的值,无论flag本身有没有加volatile。
+- 如果volatile修饰一个引用对象,如果对象的属性(成员变量)发生了改变,volatile不能保证其他线程可以观察到该变化, 
+
 ### 有序性
 
 ### 原子性
