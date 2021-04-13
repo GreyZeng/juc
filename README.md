@@ -152,7 +152,7 @@ public class ThreadBasicOperation {
 }
 ```
 
-## interrupt
+### interrupt
 
 - interrupt()
 > 打断某个线程(设置标志位)
@@ -219,8 +219,6 @@ public class ThreadFinished {
 ```
 
 示例代码: ThreadFinished.java
-
-## 线程的基本操作
 
 
 ## 参考资料
