@@ -274,6 +274,74 @@ public class ThreadVisible {
 - 如在上述代码的死循环中增加了System.out.println(), 则会强制同步flag的值,无论flag本身有没有加volatile。
 - 如果volatile修饰一个引用对象,如果对象的属性(成员变量)发生了改变,volatile不能保证其他线程可以观察到该变化。
 
+关于三级缓存
+
+![3_cache](https://img2020.cnblogs.com/blog/683206/202104/683206-20210413223658983-1491978414.png)
+
+如上图，内存读出的数据会在L3，L2，L1上都存一份。所谓线程数据的可见性，指的就是内存中的某个数据，假如第一个CPU的一个核读取到了，和其他的核读取到这个数据之间的可见性。
+
+在从内存中读取数据的时候，根据的是程序局部性的原理，按块来读取，这样可以提高效率，充分发挥总线CPU针脚等一次性读取更多数据的能力。
+
+所以这里引入了一个缓存行的概念，目前一个缓存行多用**64个字节**来表示。
+
+如何来验证CPU读取缓存行这件事，我们可以通过一个示例来说明：
+
+```java
+public class CacheLinePadding {
+    public static T[] arr = new T[2];
+
+    static {
+        arr[0] = new T();
+        arr[1] = new T();
+    }
+
+    public static void main(String[] args) throws Exception {
+        Thread t1 = new Thread(() -> {
+            for (long i = 0; i < 1000_0000L; i++) {
+                arr[0].x = i;
+            }
+        });
+
+        Thread t2 = new Thread(() -> {
+            for (long i = 0; i < 1000_0000L; i++) {
+                arr[1].x = i;
+            }
+        });
+
+        final long start = System.nanoTime();
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        System.out.println((System.nanoTime() - start) / 100_0000);
+    }
+
+    private static class Padding {
+        public volatile long p1, p2, p3, p4, p5, p6, p7;
+    }
+
+    private static class T /**extends Padding*/ {
+        public volatile long x = 0L;
+    } 
+}
+
+```
+说明：以上代码，T这个类extends Padding与否，会影响整个流程的执行时间，如果继承了，会减少执行时间，因为继承Padding后，arr[0]和arr[1]一定不在同一个缓存行里面，所以不需要同步数据，速度就更快一些了。
+
+> jdk1.8增加了一个注解：@Contended，标注了以后，不会在同一缓存行, 仅适用于jdk1.8
+还需要增加jvm参数：
+
+```
+-XX:-RestrictContended
+```
+
+CPU为每个缓存行标记四种状态（使用两位）
+
+- Exclusive
+- Invalid
+- Shared
+- Modified
+
 ### 有序性
 
 ### 原子性
