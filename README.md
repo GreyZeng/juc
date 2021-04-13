@@ -152,6 +152,8 @@ public class ThreadBasicOperation {
 }
 ```
 
+示例代码：ThreadBasicOperation.java
+
 ### interrupt
 
 - interrupt()
