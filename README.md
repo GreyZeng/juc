@@ -2,7 +2,6 @@
 
 原文地址：[Java多线程学习笔记](https://www.cnblogs.com/greyzeng/p/14176141.html)
 
-源码: [Github](https://github.com/GreyZeng/juc)
 
 ## 什么是程序，进程和线程？
 
@@ -346,6 +345,15 @@ CPU为每个缓存行标记四种状态（使用两位）
 
 ### 原子性
 
+待续...
+
+## 思维导图
+
+[processon](https://www.processon.com/view/5ec513425653bb6f2a1f7da8)
+
+## 完整源码
+
+[Github](https://github.com/GreyZeng/juc)
 
 
 ## 参考资料
