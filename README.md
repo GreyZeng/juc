@@ -504,6 +504,77 @@ lock cmpxchg
 
 jdk早期是重量级别锁 ，通过0x80中断 进行用户态和内核态转换，所以效率比较低，有了CAS操作，大大提升了效率。
 
+## 对象的内存布局(Hotspot实现)
+
+我们可以通过jol包来查看一下某个对象的内存布局
+
+引入jol依赖
+```xml
+<dependency>
+  <groupId>org.openjdk.jol</groupId>
+  <artifactId>jol-core</artifactId>
+  <version>0.15</version>
+</dependency>
+```
+
+示例代码(ObjectModel.java)
+
+```java
+public class ObjectModel {
+    public static void main(String[] args) {
+        T o = new T();
+        String s = ClassLayout.parseInstance(o).toPrintable();
+        System.out.println(s);
+    }
+}
+class  T{
+     
+}
+
+```
+配置VM参数，开启指针压缩
+
+```shell
+-XX:+UseCompressedClassPointers
+```
+
+运行结果如下：
+```
+OFF  SZ   TYPE DESCRIPTION               VALUE
+  0   8        (object header: mark)     0x0000000000000005 (biasable; age: 0)
+  8   4        (object header: class)    0x00067248
+ 12   4        (object alignment gap)    
+Instance size: 16 bytes
+Space losses: 0 bytes internal + 4 bytes external = 4 bytes total
+```
+
+其中8个字节的markword
+
+4个字节的类型指针，可以找到T.class
+
+这里一共是12个字节， 由于字节数务必是8的整数倍，所以补上4个字节，共16个字节
+
+我们修改一下T这个类
+
+```java
+class  T{
+    public int a = 3;
+    public long b = 3l;
+}
+```
+
+再次执行,可以看到结果是
+```
+OFF  SZ   TYPE DESCRIPTION               VALUE
+  0   8        (object header: mark)     0x0000000000000005 (biasable; age: 0)
+  8   4        (object header: class)    0x00067248
+ 12   4    int T.a                       3
+ 16   8   long T.b                       3
+Instance size: 24 bytes
+Space losses: 0 bytes internal + 0 bytes external = 0 bytes total
+```
+
+其中多了4位表示int这个成员变量，多了8位表示long这个成员变量
 
 
 ## 思维导图

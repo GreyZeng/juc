@@ -17,5 +17,10 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>org.openjdk.jol</groupId>
+            <artifactId>jol-core</artifactId>
+            <version>0.15</version>
+        </dependency>
     </dependencies>
 </project>
