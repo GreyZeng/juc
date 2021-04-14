@@ -410,7 +410,49 @@ public class DisOrder {
 
 ### 原子性
 
-待续...
+程序的原子性是指整个程序中的所有操作，要么全部完成，要么全部失败，不可能滞留在中间某个环节；在多个线程一起执行的时候，一个操作一旦开始，就不会被其他线程所打断。
+
+
+一个示例：
+```java
+class T {
+    m = 9;
+}
+```
+对象T在创建过程中，背后其实是包含了多条执行语句的，由于有CPU乱序执行的情况，所以极有可能会在初始化过程中生成以一个半初始化对象t，这个t的m等于0（还没有来得及做赋值操作）
+
+所以，不要在某个类的构造方法中启动一个线程，这样会导致this对象逸出，因为这个类的对象可能还来不及执行初始化操作，就启动了一个线程，导致了异常情况。
+
+
+volatile一方面可以保证线程数据之间的可见性，另外一方面，也可以防止类似这样的指令重排，所以
+所以，单例模式中，DCL方式的单例一定要加volatile修饰：
+
+```java
+public class Singleton6 {
+    private volatile static Singleton6 INSTANCE;
+
+    private Singleton6() {
+    }
+
+    public static Singleton6 getInstance() {
+        if (INSTANCE == null) {
+            synchronized (Singleton6.class) {
+                if (INSTANCE == null) {
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    INSTANCE = new Singleton6();
+                }
+            }
+        }
+        return INSTANCE;
+    }
+}
+```
+
+具体可以参考[设计模式学习笔记](https://www.cnblogs.com/greyzeng/p/14107751.html) 中单例模式的说明。
 
 ## 思维导图
 
@@ -433,3 +475,7 @@ public class DisOrder {
 [Java并发编程实战](https://book.douban.com/subject/10484692/)
 
 [【并发编程】MESI--CPU缓存一致性协议](https://www.cnblogs.com/z00377750/p/9180644.html)
+
+[【并发编程】细说并发编程的三大特性](https://zhuanlan.zhihu.com/p/274569273)
+
+[设计模式学习笔记](https://www.cnblogs.com/greyzeng/p/14107751.html)
