@@ -47,7 +47,7 @@ T1线程在执行的时候，将T1线程的指令放在PC，数据放在Register
 - CPU密集型
 - IO密集型
 
-## 线程数量是不是设置的越大越好？
+## 线程数量是不是设置地越大越好？
 
 不是，因为线程切换要消耗资源。
 
@@ -161,7 +161,7 @@ public class ThreadBasicOperation {
 - isInterrupted()
 > 查询某线程是否被打断过(查询标志位)
 
-- static interrrupted
+- static interrupted
 > 查询当前线程是否被打断过，并重置打断标志位
 
 示例代码：ThreadInterrupt.java
@@ -470,7 +470,6 @@ public class Singleton6 {
 流程图如下：
 ![cas_case](https://img2020.cnblogs.com/blog/683206/202104/683206-20210407160938520-132921153.png)
 
-
 ### ABA问题
 
 CAS会出现一个ABA的问题，即在一个线程回写值的时候，其他线程其实动过那个原始值，只不过其他线程操作后这个值依然是原始值。
@@ -486,6 +485,27 @@ CAS会出现一个ABA的问题，即在一个线程回写值的时候，其他�
 当AtomicStampedReference设置对象值时，对象值以及时间戳都必须满足期望值，写入才会成功。
 
 因此，即使对象值被反复读写，写回原值，只要时间戳发生变化，就能防止不恰当的写入。
+
+### CAS的底层实现
+
+
+> Unsafe.cpp-->Atom::cmpxchg-->Atomic_linux_x86_inline.hpp-->调用了汇编的LOCK_IF_MP方法
+>
+> Multiple_processor
+>
+> lock cmpxchg
+>
+> 虽然cmpxchg指令不是原子的，但是加了lock指令后，则cmpxhg被上锁，不允许被打断。
+>
+
+在单核CPU中，无须加lock，在多核CPU中，必须加lock，可以参考stackoverflow上的这个回答:
+
+[is-x86-cmpxchg-atomic-if-so-why-does-it-need-lock](https://stackoverflow.com/questions/27837731/is-x86-cmpxchg-atomic-if-so-why-does-it-need-lock/44273130#44273130)
+
+使用CAS好处
+
+jdk早期是重量级别锁 ，通过0x80中断 进行用户态和内核态转换，所以效率比较低，有了CAS操作，大大提升了效率。
+
 
 
 ## 思维导图
