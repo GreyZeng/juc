@@ -488,17 +488,15 @@ CAS会出现一个ABA的问题，即在一个线程回写值的时候，其他�
 
 ### CAS的底层实现
 
-
 > Unsafe.cpp-->Atom::cmpxchg-->Atomic_linux_x86_inline.hpp-->调用了汇编的LOCK_IF_MP方法
 >
 > Multiple_processor
->
-> lock cmpxchg
->
-> 虽然cmpxchg指令不是原子的，但是加了lock指令后，则cmpxhg被上锁，不允许被打断。
->
 
-在单核CPU中，无须加lock，在多核CPU中，必须加lock，可以参考stackoverflow上的这个回答:
+```
+lock cmpxchg
+```
+
+虽然cmpxchg指令不是原子的，但是加了lock指令后，则cmpxhg被上锁，不允许被打断。 在单核CPU中，无须加lock，在多核CPU中，必须加lock，可以参考stackoverflow上的这个回答:
 
 [is-x86-cmpxchg-atomic-if-so-why-does-it-need-lock](https://stackoverflow.com/questions/27837731/is-x86-cmpxchg-atomic-if-so-why-does-it-need-lock/44273130#44273130)
 
