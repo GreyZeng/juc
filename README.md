@@ -328,20 +328,85 @@ public class CacheLinePadding {
 说明：以上代码，T这个类extends Padding与否，会影响整个流程的执行时间，如果继承了，会减少执行时间，因为继承Padding后，arr[0]和arr[1]一定不在同一个缓存行里面，所以不需要同步数据，速度就更快一些了。
 
 > jdk1.8增加了一个注解：@Contended，标注了以后，不会在同一缓存行, 仅适用于jdk1.8
-还需要增加jvm参数：
+还需要增加jvm参数
 
 ```
 -XX:-RestrictContended
 ```
 
-CPU为每个缓存行标记四种状态（使用两位）
+CPU为每个缓存行标记四种状态（使用两位） 
 
 - Exclusive
 - Invalid
 - Shared
 - Modified
 
+参考：[【并发编程】MESI--CPU缓存一致性协议](https://www.cnblogs.com/z00377750/p/9180644.html)
+
 ### 有序性
+
+为什么会出现乱序执行呢？因为CPU为了提高效率，可能在执行某些指令的时候，不按顺序执行（指令前后没有依赖关系的时候）
+
+乱序存在的条件是：不影响单线程的最终一致性(as - if - serial)
+
+验证乱序执行的程序示例 DisOrder.java：
+
+```java
+public class DisOrder {
+    private static int x = 0, y = 0;
+    private static int a = 0, b = 0;
+
+    // 以下程序可能会执行比较长的时间
+    public static void main(String[] args) throws InterruptedException {
+        int i = 0;
+        for (;;) {
+            i++;
+            x = 0;
+            y = 0;
+            a = 0;
+            b = 0;
+            Thread one = new Thread(() -> {
+                // 由于线程one先启动，下面这句话让它等一等线程two. 读着可根据自己电脑的实际性能适当调整等待时间.
+                shortWait(100000);
+                a = 1;
+                x = b;
+            });
+
+            Thread other = new Thread(() -> {
+                b = 1;
+                y = a;
+            });
+            one.start();
+            other.start();
+            one.join();
+            other.join();
+            String result = "第" + i + "次 (" + x + "," + y + "）";
+            if (x == 0 && y == 0) {
+                // 出现这个分支，说明指令出现了重排
+                // 否则不可能 x和y同时都为0
+                System.err.println(result);
+                break;
+            } else {
+                // System.out.println(result);
+            }
+        }
+    }
+
+    public static void shortWait(long interval) {
+        long start = System.nanoTime();
+        long end;
+        do {
+            end = System.nanoTime();
+        } while (start + interval >= end);
+    }
+}
+```
+
+如上示例，如果指令不出现乱序，那么x和y不可能同时为0，通过执行这个程序可以验证出来，在我本机测试的结果是：
+
+执行到第1425295次 出现了x和y同时为0的情况。
+
+
 
 ### 原子性
 
@@ -358,6 +423,7 @@ CPU为每个缓存行标记四种状态（使用两位）
 
 ## 参考资料
 
+
 [多线程与高并发-马士兵](https://ke.qq.com/course/3132461?tuin=b09cbb87)
 
 [实战Java高并发程序设计(第2版)](https://book.douban.com/subject/30358019/)
@@ -365,3 +431,5 @@ CPU为每个缓存行标记四种状态（使用两位）
 [深入浅出Java多线程](http://concurrent.redspider.group/RedSpider.html)
 
 [Java并发编程实战](https://book.douban.com/subject/10484692/)
+
+[【并发编程】MESI--CPU缓存一致性协议](https://www.cnblogs.com/z00377750/p/9180644.html)
