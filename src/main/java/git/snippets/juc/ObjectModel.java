@@ -13,8 +13,9 @@ public class ObjectModel {
         String s = ClassLayout.parseInstance(o).toPrintable();
         System.out.println(s);
     }
+    static class  T{
+        public int a = 3;
+        public long b = 3l;
+    }
 }
-class  T{
-    public int a = 3;
-    public long b = 3l;
-}
+
