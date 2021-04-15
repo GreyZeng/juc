@@ -647,6 +647,103 @@ synchronized是可重入锁
 
 一个线程拿20个对象进行加锁，批量锁的重偏向（20个对象），批量锁撤销（变成轻量级锁）（40个对象）， 通过Epoch中的值和对应的类对象里面记录的值比较。
 
+
+
+
+## synchronized
+
+### 锁定对象
+
+```java
+public class SynchronizedObject implements Runnable {
+    static SynchronizedObject instance = new SynchronizedObject();
+    final Object object = new Object();
+    static volatile int i = 0;
+
+    @Override
+    public void run() {
+        for (int j = 0; j < 1000000; j++) {
+            // 任何线程要执行下面的代码，必须先拿到object的锁
+            synchronized (object) {
+                i++;
+            }
+        }
+    }
+    public static void main(String[] args) throws InterruptedException {
+        Thread t1 = new Thread(instance);
+        Thread t2 = new Thread(instance);
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        System.out.println(i);
+    }
+}
+```
+
+### 锁定方法
+
+- 锁定静态方法相当于锁定当前类
+
+```java
+public class SynchronizedStatic implements Runnable {
+    static SynchronizedStatic instance = new SynchronizedStatic();
+    static volatile int i = 0;
+
+    @Override
+    public void run() {
+        increase();
+    }
+
+    // 相当于synchronized(SynchronizedStatic.class)
+    synchronized static void increase() {
+        for (int j = 0; j < 1000000; j++) {
+            i++;
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        Thread t1 = new Thread(instance);
+        Thread t2 = new Thread(instance);
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        System.out.println(i);
+    }
+}
+```
+- 锁定非静态方法相当于锁定该对象的实例或synchronized(this)
+
+```java
+public class SynchronizedMethod implements Runnable {
+    static SynchronizedMethod instance = new SynchronizedMethod();
+    static volatile int i = 0;
+
+    @Override
+    public void run() {
+        increase();
+    }
+    void increase() {
+        for (int j = 0; j < 1000000; j++) {
+            // 任何线程要执行下面的代码，必须先拿到object的锁
+            synchronized (this) {
+                i++;
+            }
+        }
+    }
+    public static void main(String[] args) throws InterruptedException {
+        Thread t1 = new Thread(instance);
+        Thread t2 = new Thread(instance);
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        System.out.println(i);
+    }
+}
+```
+
 ## 思维导图
 
 [processon](https://www.processon.com/view/5ec513425653bb6f2a1f7da8)
