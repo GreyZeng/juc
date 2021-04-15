@@ -613,11 +613,45 @@ interpreteRuntime.cpp --> monitorenter
 ![image.png](https://cdn.nlark.com/yuque/0/2020/png/757806/1588517861099-20a991ba-7540-4f12-a1a9-47ec17a2eb6d.png#align=left&display=inline&height=520&margin=%5Bobject%20Object%5D&name=image.png&originHeight=520&originWidth=894&size=371759&status=done&style=none&width=894)
 
 
+### 锁重入
+
+synchronized是可重入锁
+可重入次数必须记录，因为解锁需要对应可重入次数的记录
+偏向锁：记录在线程栈中，每重入一次，LR+1，备份原来的markword
+轻量级锁：类似偏向锁
+重量级锁：记录在ObjectMonitor的一个字段中
+
+自旋锁什么时候升级为重量级锁？
+- 有线程超过十次自旋
+- -XX：PreBlockSpin（jdk1.6之前）
+- 自旋的线程超过CPU核数一半
+- jdk1.6 以后，JVM自己控制
+
+
+### 为什么有偏向锁启动和偏向锁未启动？
+
+未启动：普通对象001
+已启动：匿名偏向101
+
+### 为什么有自旋锁还需要重量级锁？
+
+因为自旋会占用CPU时间，消耗CPU资源，如果自旋的线程多，CPU资源会被消耗，所以会升级成重量级锁（队列）例如：ObjectMonitor里面的WaitSet，重量级锁会把线程都丢到WaitSet中冻结, 不需要消耗CPU资源
+
+### 偏向锁是否一定比自旋锁效率高？
+
+明确知道多线程的情况下，不一定。
+因为偏向锁在多线程情况下，会涉及到锁撤销，这个时候直接使用自旋锁，JVM启动过程，会有很多线程竞争，比如启动的时候，肯定是多线程的，所以默认情况，启动时候不打开偏向锁，过一段时间再打开。
+有一个参数可以配置：BiasedLockingStartupDelay默认是4s钟
+
+### 偏向锁状态下，调用了wait方法，直接升级成重量级锁
+
+一个线程拿20个对象进行加锁，批量锁的重偏向（20个对象），批量锁撤销（变成轻量级锁）（40个对象）， 通过Epoch中的值和对应的类对象里面记录的值比较。
+
 ## 思维导图
 
 [processon](https://www.processon.com/view/5ec513425653bb6f2a1f7da8)
 
-## 完整源码
+## 源码
 
 [Github](https://github.com/GreyZeng/juc)
 
