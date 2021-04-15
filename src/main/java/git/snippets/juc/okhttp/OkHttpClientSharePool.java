@@ -1,6 +1,5 @@
 package git.snippets.juc.okhttp;
 
-import git.snippets.juc.okhttp.HttpClientUtils;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
