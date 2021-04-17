@@ -744,7 +744,7 @@ public class SynchronizedMethod implements Runnable {
 }
 ```
 
-## 脏读
+### 脏读
 
 ```java
 public class DirtyRead {
@@ -791,7 +791,7 @@ public class DirtyRead {
 ```
 其中的getBalance方法，如果不加synchronized，就会产生脏读的问题。
 
-## 可重入锁
+### 可重入锁
 
 > 一个同步方法可以调用另外一个同步方法，
 > 一个线程已经拥有某个对象的锁，再次申请的时候仍然会得到该对象的锁（可重入锁）
@@ -835,6 +835,81 @@ public class SynchronizedReentry implements Runnable {
 示例见：
 
 SynchronizedException.java
+
+### synchronized的底层实现
+
+在早期的JDK使用的是OS的重量级锁
+
+后来的改进锁升级的概念：
+
+synchronized (Object)
+
+- markword 记录这个线程ID （使用偏向锁）
+- 如果线程争用：升级为 自旋锁
+- 10次自旋以后，升级为重量级锁 - OS
+
+所以：
+
+- 执行时间短（加锁代码），线程数少，用自旋
+- 执行时间长，线程数多，用系统锁
+
+### synchronized不能锁定String常量，Integer，Long等基础类型
+
+见示例：
+
+SynchronizedBasicType.java
+
+
+## 如何模拟死锁
+
+```java
+public class DeadLock implements Runnable {
+  int flag = 1;
+  static Object o1 = new Object();
+  static Object o2 = new Object();
+
+  public static void main(String[] args) {
+    DeadLock lock = new DeadLock();
+    DeadLock lock2 = new DeadLock();
+    lock.flag = 1;
+    lock2.flag = 0;
+    Thread t1 = new Thread(lock);
+    Thread t2 = new Thread(lock2);
+    t1.start();
+    t2.start();
+  }
+
+  @Override
+  public void run() {
+    System.out.println("flag = " + flag);
+    if (flag == 1) {
+      synchronized (o2) {
+        try {
+          Thread.sleep(500);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+        synchronized (o1) {
+          System.out.println("1");
+        }
+      }
+    }
+    if (flag == 0) {
+      synchronized (o1) {
+        try {
+          Thread.sleep(500);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+
+        synchronized (o2) {
+          System.out.println("0");
+        }
+      }
+    }
+  }
+}
+```
 
 ## 思维导图
 
