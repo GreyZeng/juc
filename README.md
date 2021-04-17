@@ -860,7 +860,7 @@ synchronized (Object)
 SynchronizedBasicType.java
 
 
-## 如何模拟死锁
+### 如何模拟死锁
 
 ```java
 public class DeadLock implements Runnable {
