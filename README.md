@@ -911,6 +911,27 @@ public class DeadLock implements Runnable {
 }
 ```
 
+
+## volatile
+
+- 保持线程之间的可见性(不保证操作的原子性)，依赖这个MESI协议
+- 防止指令重排序，CPU的load fence和store fence原语支持
+
+
+
+CPU原来执行指令一步一步执行，现在是流水线执行，编译以后可能会产生指令的重排序，这样可以提高性能
+
+### DCL为什么一定要加volatile？
+
+在New对象的时候，编译完实际上是分了三步
+
+1. 对象申请内存，成员变量会被赋初始值
+2. 成员变量设为真实值
+3. 成员变量赋给对象
+
+指令重排序可能会导致2和3进行指令重排，导致下一个线程拿到一个半初始化的对象，导致单例被破坏。所以DCL必须加Volitile
+
+
 ## 思维导图
 
 [processon](https://www.processon.com/view/5ec513425653bb6f2a1f7da8)
