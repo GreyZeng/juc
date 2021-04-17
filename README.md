@@ -923,6 +923,32 @@ CPU原来执行指令一步一步执行，现在是流水线执行，编译以�
 
 ### DCL为什么一定要加volatile？
 
+DCL示例:
+```java
+public class Singleton6 {
+	private volatile static Singleton6 INSTANCE;
+
+	private Singleton6() {
+	}
+
+	public static Singleton6 getInstance() {
+		if (INSTANCE == null) {
+			synchronized (Singleton6.class) {
+				if (INSTANCE == null) {
+					try {
+						Thread.sleep(1);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					INSTANCE = new Singleton6();
+				}
+			}
+		}
+		return INSTANCE;
+	}
+}
+```
+
 在New对象的时候，编译完实际上是分了三步
 
 1. 对象申请内存，成员变量会被赋初始值
