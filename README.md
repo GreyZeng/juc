@@ -608,6 +608,31 @@ Space losses: 0 bytes internal + 0 bytes external = 0 bytes total
 
 如果发生异常，synchronized会自动释放锁
 
+```java
+public class ExceptionCauseUnLock {
+    /*volatile */ boolean stop = false;
+
+    public static void main(String[] args) {
+        ExceptionCauseUnLock t = new ExceptionCauseUnLock();
+        new Thread(t::m, "t1").start();
+        try {
+            TimeUnit.SECONDS.sleep(4);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (t.stop) {
+            int m = 1 / 0;
+        }
+    }
+
+    synchronized void m() {
+        while (!stop) {
+            stop = true;
+        }
+    }
+}
+```
+
 interpreteRuntime.cpp --> monitorenter
 
 ![image.png](https://cdn.nlark.com/yuque/0/2020/png/757806/1588517861099-20a991ba-7540-4f12-a1a9-47ec17a2eb6d.png#align=left&display=inline&height=520&margin=%5Bobject%20Object%5D&name=image.png&originHeight=520&originWidth=894&size=371759&status=done&style=none&width=894)
@@ -853,11 +878,6 @@ synchronized (Object)
 - 执行时间短（加锁代码），线程数少，用自旋
 - 执行时间长，线程数多，用系统锁
 
-### synchronized不能锁定String常量，Integer，Long等基础类型
-
-见示例：
-
-SynchronizedBasicType.java
 
 
 ### 如何模拟死锁
@@ -911,6 +931,51 @@ public class DeadLock implements Runnable {
 }
 ```
 
+### synchronized不能锁定String常量，Integer，Long等基础类型
+
+见示例：
+
+SynchronizedBasicType.java
+
+### 锁定某对象o，如果o的属性发生改变，不影响锁的使用; 但是如果o变成另外一个对象，则锁定的对象发生改变, 应该避免将锁定对象的引用变成另外的对象
+
+```java
+public class SyncSameObject {
+    Object object = new Object();
+
+    public static void main(String[] args) {
+        SyncSameObject t = new SyncSameObject();
+        new Thread(t::m).start();
+        Thread t2 = new Thread(t::m, "t2");
+        //锁对象发生改变，所以t2线程得以执行，如果注释掉这句话，线程2将永远得不到执行机会
+        t.object = new Object();
+
+        t2.start();
+    }
+
+    void m() {
+        synchronized (object) {
+            while (true) {
+                try {
+                    TimeUnit.SECONDS.sleep(2);
+                    System.out.println("current thread is " + Thread.currentThread().getName());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+```
+
+如果不执行
+
+```java
+t.object = new Object() 
+```
+
+这句话，m2线程将永远得不到执行。
+
 
 ## volatile
 
@@ -924,6 +989,7 @@ CPU原来执行指令一步一步执行，现在是流水线执行，编译以�
 ### DCL为什么一定要加volatile？
 
 DCL示例:
+
 ```java
 public class Singleton6 {
 	private volatile static Singleton6 INSTANCE;
@@ -957,6 +1023,11 @@ public class Singleton6 {
 
 指令重排序可能会导致2和3进行指令重排，导致下一个线程拿到一个半初始化的对象，导致单例被破坏。所以DCL必须加Volitile
 
+### volatile修饰引用对象
+
+> 被volatile关键字修饰的对象作为类变量或实例变量时，其对象中携带的类变量和实例变量也相当于被volatile关键字修饰了
+
+示例见：VolatileRef.java
 
 ## 思维导图
 
