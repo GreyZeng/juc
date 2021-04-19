@@ -1136,6 +1136,7 @@ public class Singleton6 {
 在大数据量的情况下，LongAddr的效率最高。参考
 
 - [从LONGADDER看更高效的无锁实现](https://coolshell.cn/articles/11454.html)
+  
 - [Java 8 Performance Improvements: LongAdder vs AtomicLong](http://blog.palominolabs.com/2014/02/10/java-8-performance-improvements-longadder-vs-atomiclong/)
 
 ## 思维导图
