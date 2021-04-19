@@ -1146,17 +1146,18 @@ public class Singleton6 {
 
 比sychronized强大的地方在于:
 
-1. 可以tryLock，尝试若干时间片内获取锁
+1. 可以tryLock，尝试若干时间片内获取锁。 见： ReentrantLockTryLock.java
 
-2. 可以用lockInterruptibly，在lock的时候可以被打断，一旦被打断，可以作出响应，而Sychronized一旦Wait后，必须得让别人notify，才能醒来
+2. 可以用lockInterruptibly，在lock的时候可以被打断，一旦被打断，可以作出响应，而sychronized一旦wait后，必须得让别人notify，才能醒来。见：ReentrantLockInterrupt.java
 
-3. 可以设置公平与否，公平的概念是，每个线程来了以后会检查等待队列里面会不会有等待的线程，如果有，则进入队列等待。
+3. 可以设置公平与否，公平的概念是，每个线程来了以后会检查等待队列里面会不会有等待的线程，如果有，则进入队列等待。见：ReentrantLockFair.java
 
 **注：在使用ReentrantLock的时候一定要记得unlock，因为如果使用synchronized遇到异常，jvm会自动释放锁，但是用ReentrantLock必须手动释放锁，因此经常在finally中进行锁的释放** 
 
 详见：
 
 - ReentrantLockAndSynchronized.java
+
 - SynchronizedException.java
 
 
