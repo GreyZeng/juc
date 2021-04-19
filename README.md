@@ -982,9 +982,102 @@ t.object = new Object()
 - 保持线程之间的可见性(不保证操作的原子性)，依赖这个MESI协议
 - 防止指令重排序，CPU的load fence和store fence原语支持
 
-
-
 CPU原来执行指令一步一步执行，现在是流水线执行，编译以后可能会产生指令的重排序，这样可以提高性能
+
+关于volatile不保证原子性的代码示例：
+
+```java
+public class VolatileNOTAtomic {
+    volatile static Data data;
+
+    public static void main(String[] args) {
+        Thread writer = new Thread(() -> {
+            for (int i = 0; i < 10000; i++) {
+                data = new Data(i, i);
+            }
+        });
+
+        Thread reader = new Thread(() -> {
+            while (data == null) {
+            }
+            int a = data.a;
+            int b = data.b;
+            if (a != b) {
+                // 会出现这种情况是因为new Data(i,i)非原子操作，会产生中间状态的对象，导致a和b的值会不一致
+                System.out.printf("a = %s, b=%s%n", a, b);
+            }
+        });
+        writer.start();
+        reader.start();
+        try {
+            writer.join();
+            reader.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("end");
+    }
+
+    public static class Data {
+        int a;
+        int b;
+
+        Data(int a, int b) {
+            this.a = a;
+            this.b = b;
+        }
+    }
+}
+```
+
+volatile并不能保证多个线程共同修改running变量时所带来的不一致问题，也就是说volatile不能替代synchronized, 示例程序：
+
+```java
+public class VolatileCanNotReplaceSynchronized {
+    volatile int count = 0;
+    int count2 = 0;
+
+    public static void main(String[] args) {
+        VolatileCanNotReplaceSynchronized t = new VolatileCanNotReplaceSynchronized();
+        List<Thread> threads = new ArrayList<>();
+        List<Thread> threads2 = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            threads.add(new Thread(t::m));
+            threads2.add(new Thread(t::m2));
+        }
+        threads.forEach(item -> item.start());
+        threads2.forEach(item -> item.start());
+        threads.forEach(item -> {
+            try {
+                item.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        threads2.forEach(item -> {
+            try {
+                item.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        System.out.println(t.count);
+        System.out.println(t.count2);
+    }
+
+    void m() {
+        for (int i = 0; i < 1000; i++) {
+            count++;
+        }
+    }
+
+    synchronized void m2() {
+        for (int i = 0; i < 1000; i++) {
+            count2++;
+        }
+    }
+}
+```
 
 ### DCL为什么一定要加volatile？
 
@@ -1029,6 +1122,22 @@ public class Singleton6 {
 
 示例见：VolatileRef.java
 
+
+## AtomicLong, LongAddr, Synchronized效率之争
+
+需要实际测试一下。
+
+示例见：
+
+- AddByAtomicLong.java（无锁操作）
+- AddByLongAdder.java （LongAdder采用了分段锁，分段锁又是CAS实现的。多段并行运行，在线程数比较多的情况下，效率比较高。线程数少的情况下没什么优势。）
+- AddBySynchronized.java
+
+在大数据量的情况下，LongAddr的效率最高。参考
+
+- [从LONGADDER看更高效的无锁实现](https://coolshell.cn/articles/11454.html)
+- [Java 8 Performance Improvements: LongAdder vs AtomicLong](http://blog.palominolabs.com/2014/02/10/java-8-performance-improvements-longadder-vs-atomiclong/)
+
 ## 思维导图
 
 [processon](https://www.processon.com/view/5ec513425653bb6f2a1f7da8)
@@ -1053,3 +1162,7 @@ public class Singleton6 {
 [【并发编程】细说并发编程的三大特性](https://zhuanlan.zhihu.com/p/274569273)
 
 [设计模式学习笔记](https://www.cnblogs.com/greyzeng/p/14107751.html)
+
+[从LONGADDER看更高效的无锁实现](https://coolshell.cn/articles/11454.html)
+
+[Java 8 Performance Improvements: LongAdder vs AtomicLong](http://blog.palominolabs.com/2014/02/10/java-8-performance-improvements-longadder-vs-atomiclong/)
