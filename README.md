@@ -1154,7 +1154,10 @@ public class Singleton6 {
 
 **注：在使用ReentrantLock的时候一定要记得unlock，因为如果使用synchronized遇到异常，jvm会自动释放锁，但是用ReentrantLock必须手动释放锁，因此经常在finally中进行锁的释放** 
 
-详见：ReentrantLockAndSynchronized.java
+详见：
+
+- ReentrantLockAndSynchronized.java
+- SynchronizedException.java
 
 
 
