@@ -1139,6 +1139,23 @@ public class Singleton6 {
   
 - [Java 8 Performance Improvements: LongAdder vs AtomicLong](http://blog.palominolabs.com/2014/02/10/java-8-performance-improvements-longadder-vs-atomiclong/)
 
+
+## ReentrantLock vs sychronized
+
+可重入锁，可以替代sychronized
+
+比sychronized强大的地方在于:
+
+1. 可以tryLock，尝试若干时间片内获取锁
+2. 可以用lockInterruptibly，在lock的时候可以被打断，一旦被打断，可以作出响应，而Sychronized一旦Wait后，必须得让别人notify，才能醒来
+3. 可以设置公平与否，公平的概念是，每个线程来了以后会检查等待队列里面会不会有等待的线程，如果有，则进入队列等待。
+
+**注：在使用ReentrantLock的时候一定要记得unlock，因为如果使用synchronized遇到异常，jvm会自动释放锁，但是用ReentrantLock必须手动释放锁，因此经常在finally中进行锁的释放** 
+
+详见：ReentrantLockAndSynchronized.java
+
+
+
 ## 思维导图
 
 [processon](https://www.processon.com/view/5ec513425653bb6f2a1f7da8)
