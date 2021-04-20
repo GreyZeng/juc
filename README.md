@@ -1234,7 +1234,19 @@ public class CountDownLatchAndJoin {
 }
 ```
 
+## CyclicBarrier
 
+类似栅栏，类比：满了20个乘客就发车 这样的场景。
+
+比如：一个程序可能收集如下来源的数据：
+
+1. 数据库
+2. 网络
+3. 文件
+
+程序可以并发执行，用线程操作1，2，3，然后操作完毕后再合并, 然后执行后续的逻辑操作，就可以使用CyclicBarrier
+
+代码示例见：CyclicBarrierTest.java
 
 
 ## 思维导图
