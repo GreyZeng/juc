@@ -1140,7 +1140,13 @@ public class Singleton6 {
 - [Java 8 Performance Improvements: LongAdder vs AtomicLong](http://blog.palominolabs.com/2014/02/10/java-8-performance-improvements-longadder-vs-atomiclong/)
 
 
-## ReentrantLock vs sychronized
+## ReentrantLock
+
+**其中“读写锁”，“读锁的插队策略”,"锁的升降级" 部分参考了如下文档中的内容**
+
+[Java中的共享锁和排他锁（以读写锁ReentrantReadWriteLock为例）](https://blog.csdn.net/fanrenxiang/article/details/104312606)
+
+### ReentrantLock vs sychronized
 
 可重入锁，可以替代sychronized
 
@@ -1159,6 +1165,89 @@ public class Singleton6 {
 - ReentrantLockAndSynchronized.java
 
 - SynchronizedException.java
+
+### 读写锁
+
+
+
+
+> 在ReentrantReadWriteLock中包含读锁和写锁， 
+> 其中读锁是可以多线程共享的，即共享锁， 而写锁是排他锁，在更改时候不允许其他线程操作。 
+> 读写锁其实是一把锁，所以会有同一时刻不允许读写锁共存的规定。 
+> 之所以要细分读锁和写锁也是为了提高效率，将读和写分离，
+
+
+示例：
+
+```java
+public class ReentrantLockReadAndWrite {
+
+  private static ReentrantReadWriteLock reentrantLock = new ReentrantReadWriteLock();
+  private static ReentrantReadWriteLock.ReadLock readLock = reentrantLock.readLock();
+  private static ReentrantReadWriteLock.WriteLock writeLock = reentrantLock.writeLock();
+
+  public static void read() {
+    readLock.lock();
+    try {
+      System.out.println(Thread.currentThread().getName() + "获取读锁，开始执行");
+      Thread.sleep(1000);
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      readLock.unlock();
+      System.out.println(Thread.currentThread().getName() + "释放读锁");
+    }
+  }
+
+  public static void write() {
+    writeLock.lock();
+    try {
+      System.out.println(Thread.currentThread().getName() + "获取写锁，开始执行");
+      Thread.sleep(1000);
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      writeLock.unlock();
+      System.out.println(Thread.currentThread().getName() + "释放写锁");
+    }
+  }
+
+  public static void main(String[] args) {
+    new Thread(() -> read(), "Thread1").start();
+    new Thread(() -> read(), "Thread2").start();
+    new Thread(() -> write(), "Thread3").start();
+    new Thread(() -> write(), "Thread4").start();
+  }
+}
+```
+### 读锁的插队策略
+
+设想如下场景：
+
+在非公平的ReentrantReadWriteLock锁中，线程2和线程4正在同时读取，线程3想要写入，拿不到锁（同一时刻是不允许读写锁共存的），于是进入等待队列，
+
+线程5不在队列里，现在过来想要读取，策略1是如果允许读插队，就是说线程5读先于线程3写操作执行，因为读锁是共享锁，不影响后面的线程3的写操作，
+
+这种策略可以提高一定的效率，却可能导致像线程3这样的线程一直在等待中，因为可能线程5读操作之后又来了n个线程也进行读操作，造成线程饥饿；
+
+策略2是不允许插队，即线程5的读操作必须排在线程3的写操作之后，放入队列中，排在线程3之后，这样能避免线程饥饿。
+
+事实上ReentrantReadWriteLock在非公平情况下，读锁采用的就是策略2：不允许读锁插队，避免线程饥饿。更加确切的说是：在非公平锁情况下，允许写锁插队，也允许读锁插队，
+
+但是读锁插队的前提是队列中的头节点不能是想获取写锁的线程。
+
+以上还在非公平ReentrantReadWriteLock锁中，在公平锁中，读写锁都是是不允许插队的，严格按照线程请求获取锁顺序执行。
+
+示例见：ReentrantLockCut.java
+
+### 锁的升降级
+
+ 
+在ReentrantReadWriteLock读写锁中，只支持写锁降级为读锁，而不支持读锁升级为写锁, 
+
+之所以ReentrantReadWriteLock不支持锁的升级（其它锁可以支持），主要是避免死锁，
+
+例如两个线程A和B都在读， A升级要求B释放读锁，B升级要求A释放读锁，互相等待形成死循环。如果能严格保证每次都只有一个线程升级那也是可以的。
 
 ## CountDownLatch vs join
 
@@ -1248,6 +1337,125 @@ public class CountDownLatchAndJoin {
 
 代码示例见：CyclicBarrierTest.java
 
+## Guava RateLimiter
+
+采用令牌桶算法，用于限流
+
+代码示例见：RateLimiterUsage.java
+
+
+## Phaser（Since jdk1.7）
+
+遗传算法，可以用这个结婚的场景模拟：
+假设婚礼的宾客有5个人，加上新郎和新娘，一共7个人。
+我们可以把这7个人看成7个线程，有如下步骤要执行。
+
+1. 到达婚礼现场
+2. 吃饭
+3. 离开
+4. 拥抱（只有新郎和新娘线程可以执行）
+
+每个阶段执行完毕后才能执行下一个阶段，其中hug阶段只有新郎新娘这两个线程才能执行。
+
+
+以上需求，我们可以通过Phaser来实现，具体代码和注释如下：
+
+```java
+public class PhaserUsage {
+    static final Random R = new Random();
+    static WeddingPhaser phaser = new WeddingPhaser();
+
+    static void millSleep() {
+        try {
+            TimeUnit.MILLISECONDS.sleep(R.nextInt(1000));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        // 宾客的人数
+        final int guestNum = 5;
+        // 新郎和新娘
+        final int mainNum = 2;
+        phaser.bulkRegister(mainNum + guestNum);
+        for (int i = 0; i < guestNum; i++) {
+            new Thread(new Person("宾客" + i)).start();
+        }
+        new Thread(new Person("新娘")).start();
+        new Thread(new Person("新郎")).start();
+    }
+
+    static class WeddingPhaser extends Phaser {
+        @Override
+        protected boolean onAdvance(int phase, int registeredParties) {
+            switch (phase) {
+                case 0:
+                    System.out.println("所有人到齐");
+                    return false;
+                case 1:
+                    System.out.println("所有人吃饭");
+                    return false;
+                case 2:
+                    System.out.println("所有人离开");
+                    return false;
+                case 3:
+                    System.out.println("新郎新娘入拥抱");
+                    return true;
+                default:
+                    return true;
+            }
+        }
+    }
+    static class Person implements Runnable {
+        String name;
+        Person(String name) {
+            this.name = name;
+        }
+        @Override
+        public void run() {
+            // 先到达婚礼现场
+            arrive();
+            // 吃饭
+            eat();
+            // 离开
+            leave();
+            // 拥抱，只保留新郎和新娘两个线程可以执行
+            hug();
+        }
+        private void arrive() {
+            millSleep();
+            System.out.println("name:" + name + " 到来");
+            phaser.arriveAndAwaitAdvance();
+        }
+        private void eat() {
+            millSleep();
+            System.out.println("name:" + name + " 吃饭");
+            phaser.arriveAndAwaitAdvance();
+        }
+        private void leave() {
+            millSleep();
+            System.out.println("name:" + name + " 离开");
+            phaser.arriveAndAwaitAdvance();
+        }
+        private void hug() {
+            if ("新娘".equals(name) || "新郎".equals(name)) {
+                millSleep();
+                System.out.println("新娘新郎拥抱");
+                phaser.arriveAndAwaitAdvance();
+            } else {
+                phaser.arriveAndDeregister();
+            }
+        } 
+    }
+}
+```
+
+
+代码示例：PhaserUsage.java
+
+
+
 
 ## 思维导图
 
@@ -1277,3 +1485,5 @@ public class CountDownLatchAndJoin {
 [从LONGADDER看更高效的无锁实现](https://coolshell.cn/articles/11454.html)
 
 [Java 8 Performance Improvements: LongAdder vs AtomicLong](http://blog.palominolabs.com/2014/02/10/java-8-performance-improvements-longadder-vs-atomiclong/)
+
+[Java中的共享锁和排他锁（以读写锁ReentrantReadWriteLock为例）](https://blog.csdn.net/fanrenxiang/article/details/104312606)
