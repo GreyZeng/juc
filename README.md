@@ -1142,7 +1142,7 @@ public class Singleton6 {
 
 ## ReentrantLock
 
-**其中“读写锁”，“读锁的插队策略”,"锁的升降级" 部分参考了如下文档中的内容**
+**其中“ReentrantReadWriteLock”，“读锁的插队策略”,"锁的升降级" 部分参考了如下文档中的内容**
 
 [Java中的共享锁和排他锁（以读写锁ReentrantReadWriteLock为例）](https://blog.csdn.net/fanrenxiang/article/details/104312606)
 
@@ -1166,9 +1166,7 @@ public class Singleton6 {
 
 - SynchronizedException.java
 
-### 读写锁
-
-
+### ReentrantReadWriteLock
 
 
 > 在ReentrantReadWriteLock中包含读锁和写锁， 
@@ -1224,19 +1222,23 @@ public class ReentrantLockReadAndWrite {
 
 设想如下场景：
 
-在非公平的ReentrantReadWriteLock锁中，线程2和线程4正在同时读取，线程3想要写入，拿不到锁（同一时刻是不允许读写锁共存的），于是进入等待队列，
+在非公平的ReentrantReadWriteLock锁中，线程2和线程4正在同时读取，线程3想要写入，拿不到锁（同一时刻是不允许读写锁共存的），于是进入等待队列， 线程5不在队列里，现在过来想要读取，
 
-线程5不在队列里，现在过来想要读取，策略1是如果允许读插队，就是说线程5读先于线程3写操作执行，因为读锁是共享锁，不影响后面的线程3的写操作，
+策略1
 
-这种策略可以提高一定的效率，却可能导致像线程3这样的线程一直在等待中，因为可能线程5读操作之后又来了n个线程也进行读操作，造成线程饥饿；
+> 如果允许读插队，就是说线程5读先于线程3写操作执行，因为读锁是共享锁，不影响后面的线程3的写操作， 
+> 这种策略可以提高一定的效率，却可能导致像线程3这样的线程一直在等待中，因为可能线程5读操作之后又来了n个线程也进行读操作，造成线程饥饿；
 
-策略2是不允许插队，即线程5的读操作必须排在线程3的写操作之后，放入队列中，排在线程3之后，这样能避免线程饥饿。
+策略2
 
-事实上ReentrantReadWriteLock在非公平情况下，读锁采用的就是策略2：不允许读锁插队，避免线程饥饿。更加确切的说是：在非公平锁情况下，允许写锁插队，也允许读锁插队，
+> 不允许插队，即线程5的读操作必须排在线程3的写操作之后，放入队列中，排在线程3之后，这样能避免线程饥饿。 
+> 事实上ReentrantReadWriteLock在非公平情况下，读锁采用的就是策略2：不允许读锁插队，避免线程饥饿。更加确切的说是：在非公平锁情况下，允许写锁插队，也允许读锁插队，
 
 但是读锁插队的前提是队列中的头节点不能是想获取写锁的线程。
 
-以上还在非公平ReentrantReadWriteLock锁中，在公平锁中，读写锁都是是不允许插队的，严格按照线程请求获取锁顺序执行。
+以上还在非公平ReentrantReadWriteLock锁中，
+
+在公平锁中，读写锁都是是不允许插队的，严格按照线程请求获取锁顺序执行。
 
 示例见：ReentrantLockCut.java
 
@@ -1247,7 +1249,12 @@ public class ReentrantLockReadAndWrite {
 
 之所以ReentrantReadWriteLock不支持锁的升级（其它锁可以支持），主要是避免死锁，
 
-例如两个线程A和B都在读， A升级要求B释放读锁，B升级要求A释放读锁，互相等待形成死循环。如果能严格保证每次都只有一个线程升级那也是可以的。
+例如两个线程A和B都在读， A升级要求B释放读锁，B升级要求A释放读锁，互相等待形成死循环。
+
+如果能严格保证每次都只有一个线程升级那也是可以的。
+
+
+示例见：ReentrantReadWriteLockUpAndDown.java
 
 ## CountDownLatch vs join
 
