@@ -1458,12 +1458,163 @@ public class PhaserUsage {
 }
 ```
 
+## StampedLock
 
-代码示例：PhaserUsage.java
+StampedLock其实是对读写锁的一种改进，它支持在读同时进行一个写操作,也就是说，它的性能将会比读写锁更快。
+
+更通俗的讲就是在读锁没有释放的时候是可以获取到一个写锁，获取到写锁之后，读锁阻塞，这一点和读写锁一致，唯一的区别在于读写锁不支持在没有释放读锁的时候获取写锁。
+
+### StampedLock三种模式
+
+- 悲观读：与读写锁的读写类似，允许多个线程获取悲观读锁
+- 写锁：与读写锁的写锁类似，写锁和悲观读是互斥的。
+- 乐观读：无锁机制，类似于数据库中的乐观锁，它支持在不释放乐观读的时候是可以获取到一个写锁的，这点和读写锁不同
+
+参考： [【并发编程】面试官：有没有比读写锁更快的锁？](https://blog.csdn.net/qq_33220089/article/details/105173632)
 
 
+示例代码：
+
+悲观读 + 写锁 StampedLockPessimistic.java
+
+乐观读：StampedLockOptimistic.java
 
 
+### 使用StampedLock的注意事项
+
+1.看名字就能看出来StampedLock不支持重入锁。
+
+2.它适用于读多写少的情况，如果不是这中情况，请慎用，性能可能还不如synchronized。
+
+3.StampedLock的悲观读锁、写锁不支持条件变量。
+
+4.千万不能中断阻塞的悲观读锁或写锁，如果调用阻塞线程的interrupt()，会导致cpu飙升，如果希望StampedLock支持中断操作，请使用readLockInterruptibly（悲观读锁）与writeLockInterruptibly（写锁）。
+
+
+## Semaphore
+
+表示信号量，有如下两个操作：
+s.acquire（） 信号量-1
+s.release（） 信号量+1
+
+到0以后，就不能执行了
+
+这个可以用于限流
+
+例如：
+
+有N个线程来访问，我需要限制同时运行的只有信号量大小的线程数，示例代码：
+
+```java
+public class C08_04_Semaphore {
+    public static void main(String[] args) {
+        Semaphore semaphore = new Semaphore(1);
+        new Thread(() -> {
+            try {
+                semaphore.acquire();
+                TimeUnit.SECONDS.sleep(2);
+                System.out.println("Thread 1 executed");
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                semaphore.release();
+            }
+        }).start();
+
+        new Thread(() -> {
+            try {
+                semaphore.acquire();
+                TimeUnit.SECONDS.sleep(2);
+                System.out.println("Thread 2 executed");
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                semaphore.release();
+            }
+        }).start();
+    }
+}
+```
+
+可以有公平和非公平的方式进行配置。
+
+## Exchanger
+
+用于线程之间交换数据，exchange()方法是阻塞的，所以要两个exchange同时执行到才会触发交换。
+
+```java
+public class ExchangerUsage {
+    static Exchanger<String> semaphore = new Exchanger<>();
+
+    public static void main(String[] args) {
+        new Thread(() -> {
+            String s = "T1";
+            try {
+                s = semaphore.exchange(s);
+                TimeUnit.SECONDS.sleep(2);
+                System.out.println("Thread 1(T1) executed, Result is " + s);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+        new Thread(() -> {
+            String s = "T2";
+            try {
+                s = semaphore.exchange(s);
+                TimeUnit.SECONDS.sleep(2);
+                System.out.println("Thread 2(T2) executed, Result is " + s);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+}
+
+```
+
+## LockSupport
+
+其他锁的底层用的是AQS
+
+原先让线程等待需要wait/await，现在仅需要LockSupport.park
+
+原先叫醒线程需要notify/notifyAll，现在仅需要LockSupport.unpark, 还可以叫醒指定线程，
+
+示例代码：
+
+```java
+public class LockSupportUsage {
+    public static void main(String[] args) {
+        Thread t = new Thread(() -> {
+            for (int i = 0; i < 10; i++) {
+                try {
+                    if (i == 5) {
+                        LockSupport.park();
+                    }
+                    if (i == 8) {
+                        LockSupport.park();
+                    }
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.println(i);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        t.start();
+        // unpark可以先于park调用
+        //LockSupport.unpark(t);
+        try {
+            TimeUnit.SECONDS.sleep(8);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        LockSupport.unpark(t);
+        System.out.println("after 8 seconds");
+    }
+}
+```
 ## 思维导图
 
 [processon](https://www.processon.com/view/5ec513425653bb6f2a1f7da8)
@@ -1494,3 +1645,5 @@ public class PhaserUsage {
 [Java 8 Performance Improvements: LongAdder vs AtomicLong](http://blog.palominolabs.com/2014/02/10/java-8-performance-improvements-longadder-vs-atomiclong/)
 
 [Java中的共享锁和排他锁（以读写锁ReentrantReadWriteLock为例）](https://blog.csdn.net/fanrenxiang/article/details/104312606)
+
+[【并发编程】面试官：有没有比读写锁更快的锁？](https://blog.csdn.net/qq_33220089/article/details/105173632)
