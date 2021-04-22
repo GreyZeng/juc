@@ -1615,6 +1615,15 @@ public class LockSupportUsage {
     }
 }
 ```
+
+## 相关练习
+
+## 题目1
+
+> 实现一个容器，提供两个方法，add，size写两个线程，线程1添加10个元素到容器中，线程2实现监控元素的个数，当个数到5个时，线程2给出提示并结束
+
+
+
 ## 思维导图
 
 [processon](https://www.processon.com/view/5ec513425653bb6f2a1f7da8)
