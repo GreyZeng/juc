@@ -3,11 +3,8 @@ package git.snippets.juc;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.LockSupport;
 
 // 实现一个容器，提供两个方法，add，size写两个线程，线程1添加10个元素到容器中，
