@@ -1627,6 +1627,17 @@ public class LockSupportUsage {
 
 方法3. 使用LockSupport实现，见：MonitorContainer类的useLockSupport方法
 
+
+## 练习题2：生产者消费者问题
+
+> 写一个固定容量的同步容器，拥有put和get方法，以及getCount方法，能够支持2个生产者线程以及10个消费者线程的阻塞调用。
+
+实现方式：
+
+方法1. 使用wait/notifyAll
+方法2. ReentrantLock的Condition，本质就是等待队列
+
+
 ## 思维导图
 
 [processon](https://www.processon.com/view/5ec513425653bb6f2a1f7da8)
