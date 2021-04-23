@@ -17,6 +17,7 @@ public class ProducerAndConsumer {
 	}
 }
 
+// 使用ReentrantLock的Condition
 class MyContainerByCondition {
 	static ReentrantLock lock = new ReentrantLock();
 	final int MAX;
@@ -76,6 +77,7 @@ class MyContainerByCondition {
 	}
 }
 
+// 使用synchronized的wait和notifyAll
 class MyContainerByNotifyAndWait {
 	LinkedList<Object> list = null;
 	final int limit;

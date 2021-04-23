@@ -1615,7 +1615,7 @@ public class LockSupportUsage {
 }
 ```
 
-## 练习题1： 实现一个监控元素的容器
+## 练习题： 实现一个监控元素的容器
 
 > 实现一个容器，提供两个方法，add，size写两个线程，线程1添加10个元素到容器中，线程2实现监控元素的个数，当个数到5个时，线程2给出提示并结束
 
@@ -1628,7 +1628,7 @@ public class LockSupportUsage {
 方法3. 使用LockSupport实现，见：MonitorContainer类的useLockSupport方法
 
 
-## 练习题2：生产者消费者问题
+## 练习题：生产者消费者问题
 
 > 写一个固定容量的同步容器，拥有put和get方法，以及getCount方法，能够支持2个生产者线程以及10个消费者线程的阻塞调用。
 
@@ -1639,11 +1639,123 @@ public class LockSupportUsage {
 
 代码见：ProducerAndConsumer.java
 
-## 练习题3. A1B2C3D4
+## ThreadLocal
 
-> 用多线程的方式打印 A1B2C3D4E5....
+set方法  
+
+```java
+    public void set(T value) {
+        Thread t = Thread.currentThread();
+        ThreadLocalMap map = getMap(t);
+        if (map != null) {
+            map.set(this, value); // 将变量设置到了当前线程对象的某个Map中
+        } else {
+            createMap(t, value);
+        }
+    }
+```
+
+get方法
+
+```java
+    public T get() {
+        Thread t = Thread.currentThread();
+        ThreadLocalMap map = getMap(t);
+        if (map != null) {
+            ThreadLocalMap.Entry e = map.getEntry(this);
+            if (e != null) {
+                @SuppressWarnings("unchecked")
+                T result = (T)e.value;
+                return result;
+            }
+        }
+        return setInitialValue();
+    }
+```
+
+ThreadLocal的一个应用
+
+> Spring的声明式事务，数据库连接写在配置文件，多个方法可以支持一个完整的事务，保证多个方法是用的同一个数据库连接（其实就是放在ThreadLocal里面）
 
 
+## 强软弱虚
+
+
+### 强引用
+
+> 没有引用指向这个对象，垃圾回收会回收
+
+示例：
+
+```java
+public class NormalRef {
+    public static void main(String[] args) throws IOException {
+        M m = new M();
+        m = null;
+        System.gc();
+        System.in.read();
+    }
+    static class M {
+    	M() {}
+        @Override
+        protected void finalize() throws Throwable {
+            System.out.println("finalized");
+        }
+    }
+}
+```
+
+### 软引用
+
+> 当有一个对象被一个软引用所指向的时候，只有系统内存不够用的时候，才会被回收，可以用做缓存（比如大图片）
+
+示例如下：
+
+```java
+/**
+ * heap将装不下，这时候系统会垃圾回收，先回收一次，如果不够，会把软引用干掉
+ * 软引用，适合做缓存
+ * 示例需要把Vm options设置为:-Xms20M -Xmx20M
+ */
+public class SoftRef {
+  public static void main(String[] args) throws IOException {
+    SoftReference<byte[]> reference = new SoftReference<>(new byte[1024 * 1024 * 10]);
+    System.out.println(reference.get());
+    System.gc();
+    try {
+      TimeUnit.SECONDS.sleep(2);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+
+    System.out.println(reference.get());
+
+    byte[] bytes = new byte[1024 * 1024 * 10];
+
+    System.out.println(reference.get());
+    System.in.read();
+  }
+}
+```
+
+### 弱引用
+
+> 只要垃圾回收，就会回收。
+
+示例代码见：WeakRef.java
+
+弱引用应用：
+
+一般用在容器里面，比如：WeakHashMap, ThreadLocal也是一个典型的应用
+
+关于ThreadLocal为什么使用弱引用，可以参考这篇文章：[ThreadLocal详解、ThreadLocal与弱引用间的关系](https://blog.csdn.net/qq_42764725/article/details/106954039)
+
+### 虚引用
+
+>用于管理堆外内存, 垃圾回收时候，关联了一个队列，虚引用被回收，虚引用会被装到这个队列，并会收到一个通知（如果有值入队列，会得到一个通知）
+用于堆外内存回收
+
+代码示例见：PhantomRef.java
 
 
 ## 思维导图
@@ -1677,3 +1789,5 @@ public class LockSupportUsage {
 [Java中的共享锁和排他锁（以读写锁ReentrantReadWriteLock为例）](https://blog.csdn.net/fanrenxiang/article/details/104312606)
 
 [【并发编程】面试官：有没有比读写锁更快的锁？](https://blog.csdn.net/qq_33220089/article/details/105173632)
+
+[ThreadLocal详解、ThreadLocal与弱引用间的关系](https://blog.csdn.net/qq_42764725/article/details/106954039)
