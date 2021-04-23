@@ -1637,6 +1637,14 @@ public class LockSupportUsage {
 方法1. 使用wait/notifyAll
 方法2. ReentrantLock的Condition，本质就是等待队列
 
+代码见：ProducerAndConsumer.java
+
+## 练习题3. A1B2C3D4
+
+> 用多线程的方式打印 A1B2C3D4E5....
+
+
+
 
 ## 思维导图
 
