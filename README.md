@@ -1757,6 +1757,21 @@ public class SoftRef {
 
 代码示例见：PhantomRef.java
 
+## 容器
+
+![容器](https://img2020.cnblogs.com/blog/683206/202104/683206-20210423165618582-1292342522.png)
+
+Tips:
+
+- CocurrentHashMap写效率未必比HashMap，HashTable高，但是读效率比这两者要高
+- Queue是新加的接口，为了高并发做准备的
+- CocurrentLinkedQueue底层用的是CAS操作。
+- CocurrentSkipListMap：高并发且排序,底层是跳表实现
+- TreeMap：底层是红黑树，排序
+- Vector/HashTable 都加了锁，一般不用
+- Queue中offer和add方法区别在于：offer方法成功与否用返回值判断，add方法如果加不进会抛异常
+- Queue中，poll是取并remove这个元素 put方法：如果满，阻塞。take：如果空，阻塞。底层用的是park/unpark
+
 
 ## 思维导图
 
