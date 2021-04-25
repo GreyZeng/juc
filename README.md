@@ -1847,7 +1847,8 @@ read cost 785ms
 ## 练习题，多线程打印A1B2C3...
 
 - 使用wait,notify方式
-- 使用LockSupport TODO
+- 使用LockSupport
+- 使用volatile
 
 
 代码见：A1B2C3.java

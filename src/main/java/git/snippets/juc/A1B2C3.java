@@ -13,10 +13,42 @@ public class A1B2C3 {
     private static final char[] a = {'A', 'B', 'C', 'D', 'E'};
     private static final char[] b = {'1', '2', '3', '4', '5'};
 
-    public static void main(String[] args) {
-        useWaitNotify();
+    static Thread t1;
+    static Thread t2;
 
+    public static void main(String[] args) {
+        useVolatile();
+        useWaitNotify();
         useLockSupport();
+
+    }
+
+    volatile static boolean flag = false;
+
+    /**
+     * 使用volatile
+     */
+    public static void useVolatile() {
+        System.out.println("use volatile...");
+        t1 = new Thread(() -> {
+            for (int i = 0; i < a.length; i++) {
+                while (flag) {
+                }
+                System.out.print(a[i]);
+                flag = !flag;
+            }
+        });
+        t2 = new Thread(() -> {
+            for (int i = 0; i < b.length; i++) {
+                while (!flag) {
+                }
+                System.out.print(b[i]);
+                flag = !flag;
+            }
+        });
+        t1.start();
+        t2.start();
+        join();
     }
 
     /**
@@ -58,6 +90,10 @@ public class A1B2C3 {
         });
         t2.start();
 
+        join();
+    }
+
+    public static void join() {
         try {
             t1.join();
             t2.join();
@@ -66,9 +102,6 @@ public class A1B2C3 {
         }
         System.out.println();
     }
-
-    static Thread t1;
-    static Thread t2;
 
     /**
      * 使用LockSupport
@@ -93,13 +126,6 @@ public class A1B2C3 {
             LockSupport.unpark(t1);
         });
         t2.start();
-        try {
-            t1.join();
-            t2.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println();
-
+        join();
     }
 }
