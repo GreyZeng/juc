@@ -1846,9 +1846,12 @@ read cost 785ms
 
 ## 练习题，多线程打印A1B2C3...
 
-- 使用wait,notify方式
+- 使用wait,notify
 - 使用LockSupport
 - 使用volatile
+- 使用BlockingQueue
+- 使用ReentrantLock的Condition
+- 使用TransferQueue
 
 
 代码见：A1B2C3.java
