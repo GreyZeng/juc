@@ -1761,39 +1761,89 @@ public class SoftRef {
 
 ![容器](https://img2020.cnblogs.com/blog/683206/202104/683206-20210423165618582-1292342522.png)
 
-Tips:
+### Vector/HashTable 
 
-- CocurrentHashMap写效率未必比HashMap，HashTable高，但是读效率比这两者要高
-- Queue是新加的接口，为了高并发做准备的
-- CocurrentLinkedQueue底层用的是CAS操作。
-- CocurrentSkipListMap：高并发且排序,底层是跳表实现
+> 都加了锁，一般不用
+
+### ConcurrentHashMap
+
+> ConcurrentHashMap写效率未必比HashMap，HashTable高，但是读效率比这两者要高
+  
+示例代码：HashTableVSCHM.java
+
+输出：
+
+```
+...use hashtable....
+size : 1000000
+write cost 349ms
+read cost 28322ms
+...use HashMap....
+size : 1000000
+write cost 203ms
+read cost 27590ms
+...use ConcurrentHashMap....
+size : 1000000
+write cost 739ms
+read cost 785ms
+```
+
+
+关于ConcurrentHash和HashMap的一些分析，可以参考[这篇文章](https://blog.csdn.net/weixin_44460333/article/details/86770169)
+
+### ConcurrentLinkedQueue
+
+> ConcurrentLinkedQueue底层用的是CAS操作。比Vector效率高，示例见：ConcurrentLinkedQueueVSVector.java
+
+### CopyOnWriteList
+
+- 写时复制容器 copy on write
+- 多线程环境下，写时效率低，读时效率高
+- 适合写少读多的环境
+- ！！！！ 实验结果好像和Vector执行的时间差不多
+
+示例见：CopyOnWriteListVSVector.java
+
+### ConcurrentSkipListMap/TreeMap
+
+- ConcurrentSkipListMap：高并发且排序,底层是跳表实现
+  
 - TreeMap：底层是红黑树，排序
-- Vector/HashTable 都加了锁，一般不用
+
+### Queue VS List
+
 - Queue中offer和add方法区别在于：offer方法成功与否用返回值判断，add方法如果加不进会抛异常
+
 - Queue中，poll是取并remove这个元素 put方法：如果满，阻塞。take：如果空，阻塞。底层用的是park/unpark
-- CopyOnWriteList / CopyOnWriteSet
-
-
-List Queue的区别
-
+  
 - Queue提供了对线程友好的API: offer peek poll
-- BlockingQueue中的put和take方法是阻塞的。
 
-DelayQueue
+- BlockingQueue中的put和take方法是阻塞的。 示例：BlockingQueueUsage.java
 
-- 用于：按时间进行任务调度
 
-SynchronusQueue
+### DelayQueue
 
-- 容量为0
+- 用于：按时间进行任务调度。示例：DelayQueueUsage.java
 
-Exchanger
+### SynchronousQueue
 
-- 线程之间交换数据。
+- 容量为0,示例：SynchronousQueueUsage.java
 
-TransferQueue
+### Exchanger
+
+- 线程之间交换数据。 示例见：ExchangerUsage.java
+
+### PriorityQueue
+
+- 默认是小根堆
+- 需要实现比较器
+
+### TransferQueue
 
 - transfer方法是执行然后等待取走
+
+示例见：TransferQueueUsage.java
+
 
 ## 思维导图
 
@@ -1828,3 +1878,7 @@ TransferQueue
 [【并发编程】面试官：有没有比读写锁更快的锁？](https://blog.csdn.net/qq_33220089/article/details/105173632)
 
 [ThreadLocal详解、ThreadLocal与弱引用间的关系](https://blog.csdn.net/qq_42764725/article/details/106954039)
+
+[HashMap？ConcurrentHashMap？相信看完这篇没人能难住你！](https://blog.csdn.net/weixin_44460333/article/details/86770169)
+
+[TransferQueue实例](https://cloud.tencent.com/developer/article/1340029)
