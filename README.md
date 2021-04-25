@@ -1856,6 +1856,90 @@ read cost 785ms
 
 代码见：A1B2C3.java
 
+## 线程池
+
+### 相关配置
+
+- corePoolSize：核心线程数
+- maximumPoolSize：最大线程数 【包括核心线程数】
+- keepAliveTime：生存时间【线程长时间不干活了，归还给操作系统，核心线程不用归还，可以指定是否参与归还过程】
+- 生存时间单位
+- 任务队列：等待队列，最大值是Integer的max value【各种各样的BlockingQueue】
+- 线程工厂【默认设置优先级是普通优先级，非守护线程】，最好自定义线程名称，方便回溯
+- 拒绝策略【默认四种】
+  - ThreadPoolExecutor.AbortPolicy:丢弃任务并抛出RejectedExecutionException异常。 
+  - ThreadPoolExecutor.DiscardPolicy：丢弃任务，但是不抛出异常。
+  - ThreadPoolExecutor.DiscardOldestPolicy：丢弃队列最前面的任务，然后重新提交被拒绝的任务
+  - ThreadPoolExecutor.CallerRunsPolicy：由调用线程（提交任务的线程）处理该任务
+
+**执行流程：先占满核心线程-> 再占满任务队列-> 再占满（最大线程数-核心线程数）-> 最后执行拒绝策略**
+**一般自定义拒绝策略：将相关信息保存到redis，kafka，日志，MySQL记录 实现RejectedExecutionHandler并重写rejectedExecution方法**
+
+自定义拒绝策略代码示例：
+```java
+public class MyRejectedHandler {
+    public static void main(String[] args) {
+        ExecutorService service = new ThreadPoolExecutor(4, 4,
+                0, TimeUnit.SECONDS, new ArrayBlockingQueue<>(6),
+                Executors.defaultThreadFactory(),
+                new MyHandler());
+    }
+
+    static class MyHandler implements RejectedExecutionHandler {
+
+        @Override
+        public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+            //log("r rejected")
+            //save r kafka mysql redis
+            //try 3 times
+            if (executor.getQueue().size() < 10000) {
+                //try put again();
+            }
+        }
+    }
+}
+```
+
+
+### SingleThreadPool
+
+- 保证线程按顺序执行
+- 为什么要有单线程的线程池？这个主要是用来做任务队列和线程生命周期管理
+- 使用LinkedBlockingQueue作为任务队列，上界为：Integer.MAX_VALUE(2147483647) 约等于无界。
+
+示例代码见：SingleThreadPoolUsage.java
+
+### CachedThreadPool
+
+- corePoolSize：0
+- maxiumPoolSize：Integer.MAX_VALUE(2147483647)
+- keepAliveTime 60秒
+- 使用SynchronousQueue作为任务队列 必须马上执行
+
+使用示例：CachedThreadPoolUsage.java
+
+### FixedThreadPool
+
+- 最大线程数=核心线程数
+- 使用LinkedBlockingQueue作为任务队列，上界为：Integer.MAX_VALUE(2147483647)
+
+使用示例见：FixedThreadPoolUsage.java 
+
+### ScheduledThreadPool
+
+- 使用DelayWorkQueue
+  
+- scheduleAtFixedRate
+
+> 当前任务执行时间小于间隔时间，每次到点即执行；
+> 当前任务执行时间大于等于间隔时间，任务执行后立即执行下一次任务。相当于连续执行了。
+
+- scheduleWithFixedDelay
+
+> 每当上次任务执行完毕后，间隔一段时间执行。不管当前任务执行时间大于、等于还是小于间隔时间，执行效果都是一样的。
+ 
+使用示例：ScheduleThreadPoolUsage.java
+
 ## 思维导图
 
 [processon](https://www.processon.com/view/5ec513425653bb6f2a1f7da8)
@@ -1893,3 +1977,5 @@ read cost 785ms
 [HashMap？ConcurrentHashMap？相信看完这篇没人能难住你！](https://blog.csdn.net/weixin_44460333/article/details/86770169)
 
 [TransferQueue实例](https://cloud.tencent.com/developer/article/1340029)
+
+[理解ScheduledExecutorService中scheduleAtFixedRate和scheduleWithFixedDelay的区别](https://www.cnblogs.com/xiaoxi666/p/10783879.html)
