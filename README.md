@@ -1940,6 +1940,28 @@ public class MyRejectedHandler {
  
 使用示例：ScheduleThreadPoolUsage.java
 
+## ForkJoinPool
+
+参考：
+
+- [ForkJoinPool 的使用以及原理](https://my.oschina.net/xinxingegeya/blog/3007257)
+
+- [聊聊并发（八）——Fork/Join 框架介绍](https://www.infoq.cn/article/fork-join-introduction)
+
+ForkJoinPool 使用示例：ForkJoinPoolUsage.java
+
+### RecursiveTask 和 RecursiveAction 的区别
+
+- RecursiveAction
+
+它是一种没有任何返回值的任务。只是做一些工作，比如写数据到磁盘，然后就退出了。 一个RecursiveAction可以把自己的工作分割成更小的几块， 这样它们可以由独立的线程或者CPU执行。 我们可以通过继承来实现一个RecursiveAction。
+
+- RecursiveTask
+
+它是一种会返回结果的任务。可以将自己的工作分割为若干更小任务，并将这些子任务的执行合并到一个集体结果。 可以有几个水平的分割和合并。
+
+示例
+
 ## 思维导图
 
 [processon](https://www.processon.com/view/5ec513425653bb6f2a1f7da8)
@@ -1979,3 +2001,7 @@ public class MyRejectedHandler {
 [TransferQueue实例](https://cloud.tencent.com/developer/article/1340029)
 
 [理解ScheduledExecutorService中scheduleAtFixedRate和scheduleWithFixedDelay的区别](https://www.cnblogs.com/xiaoxi666/p/10783879.html)
+
+[ForkJoinPool 的使用以及原理](https://my.oschina.net/xinxingegeya/blog/3007257)
+
+[聊聊并发（八）——Fork/Join 框架介绍](https://www.infoq.cn/article/fork-join-introduction)
