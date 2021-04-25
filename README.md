@@ -1771,7 +1771,29 @@ Tips:
 - Vector/HashTable 都加了锁，一般不用
 - Queue中offer和add方法区别在于：offer方法成功与否用返回值判断，add方法如果加不进会抛异常
 - Queue中，poll是取并remove这个元素 put方法：如果满，阻塞。take：如果空，阻塞。底层用的是park/unpark
+- CopyOnWriteList / CopyOnWriteSet
 
+
+List Queue的区别
+
+- Queue提供了对线程友好的API: offer peek poll
+- BlockingQueue中的put和take方法是阻塞的。
+
+DelayQueue
+
+- 用于：按时间进行任务调度
+
+SynchronusQueue
+
+- 容量为0
+
+Exchanger
+
+- 线程之间交换数据。
+
+TransferQueue
+
+- transfer方法是执行然后等待取走
 
 ## 思维导图
 
