@@ -1844,6 +1844,13 @@ read cost 785ms
 
 示例见：TransferQueueUsage.java
 
+## 练习题，多线程打印A1B2C3...
+
+- 使用wait,notify方式
+- 使用LockSupport TODO
+
+
+代码见：A1B2C3.java
 
 ## 思维导图
 
