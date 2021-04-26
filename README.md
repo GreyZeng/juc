@@ -1984,6 +1984,19 @@ MapReduce模型
 
 使用示例：CompletableFutureUsage.java
 
+
+## 思考题
+
+- 证明原子操作类比synchronized更高效
+
+- AtomXXX类可以保证可见性吗？请写一个程序来证明
+
+- 写一个程序证明AtomXXX类的多个方法并不构成原子性
+
+示例代码：AtomVSSync.java
+
+
+
 ## 思维导图
 
 [processon](https://www.processon.com/view/5ec513425653bb6f2a1f7da8)
