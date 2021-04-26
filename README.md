@@ -1942,6 +1942,8 @@ public class MyRejectedHandler {
 
 ## ForkJoinPool
 
+- since jdk1.7
+  
 - RecursiveAction
 
 它是一种没有任何返回值的任务。只是做一些工作，比如写数据到磁盘，然后就退出了。 一个RecursiveAction可以把自己的工作分割成更小的几块， 这样它们可以由独立的线程或者CPU执行。 我们可以通过继承来实现一个RecursiveAction。
@@ -1969,6 +1971,7 @@ MapReduce模型
 
 > 每个线程都有单独的队列，每个线程队列执行完毕后，就会去其他的线程队列里面拿过来执行, 底层是：ForkJoinPool
 
+- since jdk 1.8
 - 会自动启动cpu核数个线程去执行任务
 
 使用示例：WorkStealingPoolUsage.java
