@@ -1976,6 +1976,14 @@ MapReduce模型
 
 使用示例：WorkStealingPoolUsage.java
 
+
+## CompletableFuture
+
+- since jdk 1.8
+- anyOf()可以实现“任意个CompletableFuture只要一个成功”，allOf()可以实现“所有CompletableFuture都必须成功”，这些组合操作可以实现非常复杂的异步流程控制。
+
+使用示例：CompletableFutureUsage.java
+
 ## 思维导图
 
 [processon](https://www.processon.com/view/5ec513425653bb6f2a1f7da8)
@@ -2019,3 +2027,5 @@ MapReduce模型
 [ForkJoinPool 的使用以及原理](https://my.oschina.net/xinxingegeya/blog/3007257)
 
 [聊聊并发（八）——Fork/Join 框架介绍](https://www.infoq.cn/article/fork-join-introduction)
+
+[使用CompletableFuture](https://www.liaoxuefeng.com/wiki/1252599548343744/1306581182447650)
