@@ -1,14 +1,33 @@
-作者：[Grey](https://www.cnblogs.com/greyzeng/)
+---
+title: Java多线程学习笔记
+sticky: 2
+tags:
+- juc
+- 多线程
+- Java
+  categories:
+- ["技术基础","编程语言","Java"]
+  abbrlink: fea6420c
+  date: 2021-04-17 18:11:38
+---
 
-原文地址：[Java多线程学习笔记](https://www.cnblogs.com/greyzeng/p/14176141.html)
+<meta name="referrer" content="no-referrer" />
+
+
+
+作者：[Grey](https://www.greyzeng.com/)
+
+原文地址：[Java多线程学习笔记](https://www.greyzeng.com/p/fea6420c.html)
 
 ## 什么是程序，进程和线程？
 
 - 程序是计算机的可执行文件
 - 进程是计算机资源分配的基本单位
 - 线程是资源调度执行的基本单位
-    - 一个程序里面不同的执行路径
-    - 多个线程共享进程中的资源
+  - 一个程序里面不同的执行路径
+  - 多个线程共享进程中的资源
+
+<!--more-->
 
 ## 线程和进程的关系
 
@@ -50,7 +69,10 @@ T1线程在执行的时候，将T1线程的指令放在PC，数据放在Register
 
 不是，因为线程切换要消耗资源。
 
-示例： 单线程和多线程来累加1亿个数。-> CountSum.java
+示例： 
+单线程和多线程来累加1亿个数。
+
+[CountSum.java](https://github.com/GreyZeng/juc/blob/master/src/main/java/git/snippets/juc/CountSum.java)
 
 ## 工作线程数（线程池中线程数量）设多少合适？
 
@@ -1641,7 +1663,7 @@ public class LockSupportUsage {
 
 ## ThreadLocal
 
-set方法  
+set方法
 
 ```java
     public void set(T value) {
@@ -1753,7 +1775,7 @@ public class SoftRef {
 ### 虚引用
 
 >用于管理堆外内存, 垃圾回收时候，关联了一个队列，虚引用被回收，虚引用会被装到这个队列，并会收到一个通知（如果有值入队列，会得到一个通知）
-用于堆外内存回收
+>用于堆外内存回收
 
 代码示例见：PhantomRef.java
 
@@ -1761,14 +1783,14 @@ public class SoftRef {
 
 ![容器](https://img2020.cnblogs.com/blog/683206/202104/683206-20210423165618582-1292342522.png)
 
-### Vector/HashTable 
+### Vector/HashTable
 
 > 都加了锁，一般不用
 
 ### ConcurrentHashMap
 
 > ConcurrentHashMap写效率未必比HashMap，HashTable高，但是读效率比这两者要高
-  
+
 示例代码：HashTableVSCHM.java
 
 输出：
@@ -1807,7 +1829,7 @@ read cost 785ms
 ### ConcurrentSkipListMap/TreeMap
 
 - ConcurrentSkipListMap：高并发且排序,底层是跳表实现
-  
+
 - TreeMap：底层是红黑树，排序
 
 ### Queue VS List
@@ -1815,7 +1837,7 @@ read cost 785ms
 - Queue中offer和add方法区别在于：offer方法成功与否用返回值判断，add方法如果加不进会抛异常
 
 - Queue中，poll是取并remove这个元素 put方法：如果满，阻塞。take：如果空，阻塞。底层用的是park/unpark
-  
+
 - Queue提供了对线程友好的API: offer peek poll
 
 - BlockingQueue中的put和take方法是阻塞的。 示例：BlockingQueueUsage.java
@@ -1867,7 +1889,7 @@ read cost 785ms
 - 任务队列：等待队列，最大值是Integer的max value【各种各样的BlockingQueue】
 - 线程工厂【默认设置优先级是普通优先级，非守护线程】，最好自定义线程名称，方便回溯
 - 拒绝策略【默认四种】
-  - ThreadPoolExecutor.AbortPolicy:丢弃任务并抛出RejectedExecutionException异常。 
+  - ThreadPoolExecutor.AbortPolicy:丢弃任务并抛出RejectedExecutionException异常。
   - ThreadPoolExecutor.DiscardPolicy：丢弃任务，但是不抛出异常。
   - ThreadPoolExecutor.DiscardOldestPolicy：丢弃队列最前面的任务，然后重新提交被拒绝的任务
   - ThreadPoolExecutor.CallerRunsPolicy：由调用线程（提交任务的线程）处理该任务
@@ -1923,12 +1945,12 @@ public class MyRejectedHandler {
 - 最大线程数=核心线程数
 - 使用LinkedBlockingQueue作为任务队列，上界为：Integer.MAX_VALUE(2147483647)
 
-使用示例见：FixedThreadPoolUsage.java 
+使用示例见：FixedThreadPoolUsage.java
 
 ### ScheduledThreadPool
 
 - 使用DelayWorkQueue
-  
+
 - scheduleAtFixedRate
 
 > 当前任务执行时间小于间隔时间，每次到点即执行；
@@ -1937,13 +1959,13 @@ public class MyRejectedHandler {
 - scheduleWithFixedDelay
 
 > 每当上次任务执行完毕后，间隔一段时间执行。不管当前任务执行时间大于、等于还是小于间隔时间，执行效果都是一样的。
- 
+
 使用示例：ScheduleThreadPoolUsage.java
 
 ## ForkJoinPool
 
 - since jdk1.7
-  
+
 - RecursiveAction
 
 它是一种没有任何返回值的任务。只是做一些工作，比如写数据到磁盘，然后就退出了。 一个RecursiveAction可以把自己的工作分割成更小的几块， 这样它们可以由独立的线程或者CPU执行。 我们可以通过继承来实现一个RecursiveAction。
