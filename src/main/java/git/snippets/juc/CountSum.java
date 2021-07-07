@@ -4,56 +4,70 @@ import java.text.DecimalFormat;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 
-
+/**
+ * 多线程求1亿个Double类型的数据
+ *
+ * @author <a href="mailto:410486047@qq.com">Grey</a>
+ * @date 2021/7/7
+ * @since
+ */
 public class CountSum {
-    private static double[] nums = new double[1_0000_0000];
-    private static Random r = new Random();
-    private static DecimalFormat df = new DecimalFormat("0.00");
+    private static final double[] NUMS = new double[1_0000_0000];
+    private static final Random R = new Random();
+    private static final DecimalFormat FORMAT = new DecimalFormat("0.00");
 
     static {
-        for (int i = 0; i < nums.length; i++) {
-            nums[i] = r.nextDouble();
+        for (int i = 0; i < NUMS.length; i++) {
+            NUMS[i] = R.nextDouble();
         }
     }
 
     public static void rand() {
-        for (int i = 0; i < nums.length; i++) {
-            nums[i] = r.nextDouble();
+        for (int i = 0; i < NUMS.length; i++) {
+            NUMS[i] = R.nextDouble();
         }
     }
 
+    /**
+     * 单线程计算一亿个Double类型的数据之和
+     *
+     * @return
+     */
     public static String m1() {
         long start = System.currentTimeMillis();
-
-
         double result = 0.0;
-
-        for (int i = 0; i < nums.length; i++) {
-            result += nums[i];
+        for (double num : NUMS) {
+            result += num;
         }
-
         long end = System.currentTimeMillis();
-        System.out.println("m1 : " + (end - start) + " result = " + df.format(result));
-        return String.valueOf(df.format(result));
+        System.out.println("计算1亿个随机Double类型数据之和[单线程], 结果是：result = " + FORMAT.format(result) + " 耗时 : " + (end - start) + "ms");
+        return String.valueOf(FORMAT.format(result));
     }
 
 
     static double result1 = 0.0, result2 = 0.0, result = 0.0;
 
+    /**
+     * 两个线程计算一亿个Double类型的数据之和
+     *
+     * @return
+     */
     private static String m2() throws Exception {
+        long start = System.currentTimeMillis();
         result1 = 0.0;
         result2 = 0.0;
+        int len = (NUMS.length >> 1);
         Thread t1 = new Thread(() -> {
-            for (int i = 0; i < (nums.length >> 1); i++) {
-                result1 += nums[i];
+            for (int i = 0; i < len; i++) {
+                result1 += NUMS[i];
             }
         });
         Thread t2 = new Thread(() -> {
-            for (int i = (nums.length >> 1); i < nums.length; i++) {
-                result2 += nums[i];
+            for (int i = len; i < NUMS.length; i++) {
+                result2 += NUMS[i];
             }
         });
-        long start = System.currentTimeMillis();
+
         t1.start();
         t2.start();
         t1.join();
@@ -61,45 +75,41 @@ public class CountSum {
 
         result = result1 + result2;
         long end = System.currentTimeMillis();
-       System.out.println("m2 : " + (end - start) + " result = " + df.format(result));
-        return String.valueOf(df.format(result));
+        System.out.println("计算1亿个随机Double类型数据之和[2个线程], 结果是：result = " + FORMAT.format(result) + " 耗时 : " + (end - start) + "ms");
+        return String.valueOf(FORMAT.format(result));
     }
 
     private static String m3() throws Exception {
+        long start = System.currentTimeMillis();
         final int threadCount = 10;
         Thread[] threads = new Thread[threadCount];
         double[] results = new double[threadCount];
 
-        final int segmentCount = nums.length / threadCount;
+        final int segmentCount = NUMS.length / threadCount;
         CountDownLatch latch = new CountDownLatch(threadCount);
         for (int i = 0; i < threadCount; i++) {
             int m = i;
             threads[i] = new Thread(() -> {
-                for (int j = m * segmentCount; j < (m + 1) * segmentCount && j < nums.length; j++) {
-                    results[m] += nums[j];
+                for (int j = m * segmentCount; j < (m + 1) * segmentCount && j < NUMS.length; j++) {
+                    results[m] += NUMS[j];
                 }
                 latch.countDown();
             });
 
         }
         double resultM3 = 0.0;
-        long start = System.currentTimeMillis();
+
         for (Thread t : threads) {
             t.start();
         }
         latch.await();
-//        for(Thread t : threads) {
-//            t.join();
-//        }
-
-        for (int i = 0; i < results.length; i++) {
-            resultM3 += results[i];
+        for (double v : results) {
+            resultM3 += v;
         }
 
         long end = System.currentTimeMillis();
-
-       System.out.println("m3 : " + (end - start) + " result = " + df.format(resultM3));
-        return String.valueOf(df.format(resultM3));
+        System.out.println("计算1亿个随机Double类型数据之和[10个线程], 结果是：result = " + FORMAT.format(resultM3) + " 耗时 : " + (end - start) + "ms");
+        return String.valueOf(FORMAT.format(resultM3));
     }
 
     public static void main(String[] args) throws Exception {
@@ -110,7 +120,7 @@ public class CountSum {
             String s = m1();
             String s1 = m2();
             String s2 = m3();
-            if (!s1.equals(s2) || !s1.equals(s) || !s.equals(s2)) {
+            if (!s1.equals(s2) || !s1.equals(s)) {
                 System.out.println("oops!");
                 System.out.println(s1);
                 System.out.println(s2);
