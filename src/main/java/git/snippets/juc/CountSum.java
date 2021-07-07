@@ -79,6 +79,11 @@ public class CountSum {
         return String.valueOf(FORMAT.format(result));
     }
 
+    /**
+     * 10个线程计算一亿个Double类型的数据之和
+     *
+     * @return
+     */
     private static String m3() throws Exception {
         long start = System.currentTimeMillis();
         final int threadCount = 10;

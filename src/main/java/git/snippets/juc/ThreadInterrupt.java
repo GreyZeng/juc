@@ -5,15 +5,16 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * interrupt示例
- * 
+ *
  * @author <a href="mailto:410486047@qq.com">Grey</a>
  * @since 1.8
  */
 public class ThreadInterrupt {
-    private static ReentrantLock lock = new ReentrantLock();
+    private static final ReentrantLock LOCK = new ReentrantLock();
+
     public static void main(String[] args) throws InterruptedException {
         Thread t = new Thread(() -> {
-            for (;;) {
+            for (; ; ) {
                 if (Thread.currentThread().isInterrupted()) {
                     System.out.println("t thread interrupted");
                     System.out.println(Thread.currentThread().isInterrupted());
@@ -26,7 +27,7 @@ public class ThreadInterrupt {
         t.interrupt();
 
         Thread t2 = new Thread(() -> {
-            for (;;) {
+            for (; ; ) {
                 if (Thread.interrupted()) {
                     System.out.println("t2 thread interrupted");
                     // Thread.interrupted()会将线程中断状态置为false
@@ -90,25 +91,25 @@ public class ThreadInterrupt {
         t6.start();
         t6.interrupt();
 
-        
+
         Thread t7 = new Thread(() -> {
-            lock.lock();
+            LOCK.lock();
             try {
                 TimeUnit.SECONDS.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
-                lock.unlock();
+                LOCK.unlock();
             }
             System.out.println("t7 end");
         });
         t7.start();
         TimeUnit.SECONDS.sleep(1);
         Thread t8 = new Thread(() -> {
-            lock.lock();
+            LOCK.lock();
             try {
             } finally {
-                lock.unlock();
+                LOCK.unlock();
             }
             System.out.println("t8 end");
         });
@@ -117,13 +118,13 @@ public class ThreadInterrupt {
         t8.interrupt();
 
         Thread t9 = new Thread(() -> {
-            lock.lock();
+            LOCK.lock();
             try {
                 TimeUnit.SECONDS.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
-                lock.unlock();
+                LOCK.unlock();
             }
             System.out.println("t7 end");
         });
@@ -132,11 +133,11 @@ public class ThreadInterrupt {
         Thread t10 = new Thread(() -> {
             System.out.println("t10 start");
             try {
-                lock.lockInterruptibly();
+                LOCK.lockInterruptibly();
             } catch (InterruptedException e) {
-               System.out.println("t10 interrupted");
+                System.out.println("t10 interrupted");
             } finally {
-                lock.unlock();
+                LOCK.unlock();
             }
             System.out.println("t8 end");
         });

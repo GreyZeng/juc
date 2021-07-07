@@ -5,10 +5,12 @@ tags:
 - juc
 - 多线程
 - Java
-  categories:
-- ["技术基础","编程语言","Java"]
-  abbrlink: fea6420c
-  date: 2021-04-17 18:11:38
+categories:
+- 技术基础
+- 编程语言
+- Java
+abbrlink: fea6420c
+date: 2021-04-17 18:11:38
 ---
 
 <meta name="referrer" content="no-referrer" />
@@ -18,6 +20,15 @@ tags:
 作者：[Grey](https://www.greyzeng.com/)
 
 原文地址：[Java多线程学习笔记](https://www.greyzeng.com/p/fea6420c.html)
+
+
+## 说明
+
+本文涉及到的所有代码和图例
+
+[图例](https://www.processon.com/view/5ec513425653bb6f2a1f7da8)
+
+[代码](https://github.com/GreyZeng/juc)
 
 ## 什么是程序，进程和线程？
 
@@ -60,9 +71,7 @@ T1线程在执行的时候，将T1线程的指令放在PC，数据放在Register
 
 示例：
 
-单线程和多线程来累加1亿个数。
-
-[CountSum.java](https://github.com/GreyZeng/juc/blob/master/src/main/java/git/snippets/juc/CountSum.java)
+单线程和多线程来累加1亿个数。 示例代码：CountSum.java
 
 运行结果
 
@@ -110,14 +119,9 @@ T1线程在执行的时候，将T1线程的指令放在PC，数据放在Register
 
 可以看到结果中，创建10个线程 不一定会比创建2个线程要执行更快。
 
-
-
 ## 单核CPU设定多线程是否有意义？
 
 有意义，因为线程的操作中可能有不消耗CPU的操作，比如：等待网络的传输，或者线程sleep，此时就可以让出CPU去执行其他线程。可以充分利用CPU资源。
-
-- CPU密集型
-- IO密集型
 
 ## 工作线程数（线程池中线程数量）设多少合适？
 
@@ -139,6 +143,8 @@ N = Ncpu * Ucpu * (1 + W/C)
 
 - W/C是等待时间和计算时间的比率。
 
+更深入的分析，可以参考[这篇文章](https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&mid=2651960260&idx=1&sn=051fd566d43d7fd35724bdf55484ee5f&chksm=bd2d06188a5a8f0e64467381c7b3df5bdcb7f81ba055d5d21ec2f8b888492be15527d23070b0&mpshare=1&scene=1&srcid=0709BLJpvk5W84O2j5cCl5bh#%23)
+
 ## Java中创建线程的方式
 
 1. 继承Thread类，重写run方法
@@ -149,41 +155,40 @@ N = Ncpu * Ucpu * (1 + W/C)
 
 具体示例可见：HelloThread.java
 
-## 线程状态
+## 线程状态和切换
 
-- NEW
+### NEW
 
-> 线程刚刚创建，还没有启动
-> 即：刚刚New Thread的时候，还没有调用start方法时候，就是这个状态
+线程刚刚创建，还没有启动，New Thread的时候，还没有调用start方法时候，就是这个状态
 
-- RUNNABLE
+### RUNNABLE
 
-> 可运行状态，由线程调度器可以安排执行，包括以下两种情况：
-> - READY
-> - RUNNING
->
-> READY和RUNNING通过yield来切换
+可运行状态，由线程调度器可以安排执行，包括以下两种情况：
 
-- WAITING
+- READY
+- RUNNING
+ 
+READY和RUNNING通过yield来切换
 
-> 等待被唤醒
+### WAITING
 
-- TIMED_WAITING
+等待被唤醒
 
-> 隔一段时间后自动唤醒
+### TIMED_WAITING
 
-- BLOCKED
+隔一段时间后自动唤醒
 
-> 被阻塞，正在等待锁
-> 只有在synchronized的时候在会进入BLOCKED状态
+### BLOCKED
 
-- TERMINATED
+被阻塞，正在等待锁，只有在synchronized的时候在会进入BLOCKED状态
 
-> 线程执行完毕后，是这个状态
+### TERMINATED
 
-## 线程状态切换
+线程执行完毕后，是这个状态
 
-![java_thread_state](https://img2020.cnblogs.com/blog/683206/202104/683206-20210412191009944-1947255770.png)
+各个线程状态切换如下
+
+![线程状态](https://img2020.cnblogs.com/blog/683206/202107/683206-20210707104907779-1294396442.png)
 
 ## 线程基本操作
 
@@ -197,7 +202,7 @@ N = Ncpu * Ucpu * (1 + W/C)
 
 ### join
 
-等待另外一个线程的结束，当前线程才会运行
+等待另外一个线程的结束，当前线程才会运行，示例代码如下：
 
 ```java
 public class ThreadBasicOperation {
@@ -219,21 +224,18 @@ public class ThreadBasicOperation {
 }
 ```
 
-示例代码：ThreadBasicOperation.java
-
 ### interrupt
 
-- interrupt()
+```java
+// 打断某个线程(设置标志位)
+interrupt()
 
-> 打断某个线程(设置标志位)
+// 查询某线程是否被打断过(查询标志位)
+isInterrupted()
 
-- isInterrupted()
-
-> 查询某线程是否被打断过(查询标志位)
-
-- static interrupted
-
-> 查询当前线程是否被打断过，并重置打断标志位
+// 查询当前线程是否被打断过，并重置打断标志位
+Thread.interrupted()
+```
 
 示例代码：ThreadInterrupt.java
 
@@ -244,7 +246,7 @@ public class ThreadBasicOperation {
 - stop方法
 - suspend/resume方法
 
-以上两种方式都不建议使用, 因为会产生数据不一致的问题，因为会释放所有的锁。
+以上两种方式都不建议使用, 因为会释放所有的锁, 所以容易产生数据不一致的问题。
 
 ### 优雅的方式
 
@@ -2064,21 +2066,17 @@ MapReduce模型
 
 
 
-## 思维导图
 
-[processon](https://www.processon.com/view/5ec513425653bb6f2a1f7da8)
-
-## 源码
-
-[Github](https://github.com/GreyZeng/juc)
 
 ## 参考资料
 
-[多线程与高并发-马士兵](https://ke.qq.com/course/3132461?tuin=b09cbb87)
+[工作线程数究竟要设置为多少 | 架构师之路](https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&mid=2651960260&idx=1&sn=051fd566d43d7fd35724bdf55484ee5f&chksm=bd2d06188a5a8f0e64467381c7b3df5bdcb7f81ba055d5d21ec2f8b888492be15527d23070b0&mpshare=1&scene=1&srcid=0709BLJpvk5W84O2j5cCl5bh#%23)
 
 [实战Java高并发程序设计(第2版)](https://book.douban.com/subject/30358019/)
 
 [深入浅出Java多线程](http://concurrent.redspider.group/RedSpider.html)
+
+[多线程与高并发-马士兵](https://ke.qq.com/course/3132461?tuin=b09cbb87)
 
 [Java并发编程实战](https://book.douban.com/subject/10484692/)
 

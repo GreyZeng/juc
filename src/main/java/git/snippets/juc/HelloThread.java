@@ -3,21 +3,20 @@ package git.snippets.juc;
 import java.util.concurrent.*;
 
 /**
- * Java创建线程的五种不同的方式
- * Grey 2020/12/11
- **/
+ * 创建线程的方式
+ *
+ * @author <a href="mailto:410486047@qq.com">Grey</a>
+ * @date 2021/7/7
+ * @since
+ */
 public class HelloThread {
     public static void main(String[] args) throws Exception {
         MyFirstThread t1 = new MyFirstThread();
         Thread t2 = new Thread(new MySecondThread());
         Thread t3 = new Thread(new FutureTask<>(new CallableThreadTest()));
-        Thread t4 = new Thread(()->{
-            System.out.println("方式4：使用lambada表达式来创建线程。");
-        });
+        Thread t4 = new Thread(()-> System.out.println("方式4：使用lambada表达式来创建线程。"));
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(()->{
-            System.out.println("方式5：使用线程池来创建线程。");
-        });
+        executor.execute(()-> System.out.println("方式5：使用线程池来创建线程。"));
         t1.start();
         t2.start();
         t3.start();
@@ -52,7 +51,7 @@ public class HelloThread {
     static class CallableThreadTest implements Callable<Integer> {
         @Override
         public Integer call() {
-            int i = 0;
+            int i;
             for (i = 0; i < 10; i++) {
                 i++;
             }
