@@ -5,10 +5,10 @@ tags:
 - juc
 - 多线程
 - Java
-categories:
+  categories:
 - ["技术基础","编程语言","Java"]
-abbrlink: fea6420c 
-date: 2021-04-17 18:11:38
+  abbrlink: fea6420c
+  date: 2021-04-17 18:11:38
 ---
 
 <meta name="referrer" content="no-referrer" />
@@ -58,22 +58,66 @@ T1线程在执行的时候，将T1线程的指令放在PC，数据放在Register
 
 以上的整个过程是通过操作系统来调度的，且线程的调度是要消耗资源的，所以，线程不是设置越多越好。
 
+示例：
+
+单线程和多线程来累加1亿个数。
+
+[CountSum.java](https://github.com/GreyZeng/juc/blob/master/src/main/java/git/snippets/juc/CountSum.java)
+
+运行结果
+
+```
+计算1亿个随机Double类型数据之和[单线程], 结果是：result = 49998957.92 耗时 : 105ms
+计算1亿个随机Double类型数据之和[2个线程], 结果是：result = 49998957.92 耗时 : 59ms
+计算1亿个随机Double类型数据之和[10个线程], 结果是：result = 49998957.92 耗时 : 61ms
+
+计算1亿个随机Double类型数据之和[单线程], 结果是：result = 50000711.89 耗时 : 101ms
+计算1亿个随机Double类型数据之和[2个线程], 结果是：result = 50000711.89 耗时 : 54ms
+计算1亿个随机Double类型数据之和[10个线程], 结果是：result = 50000711.89 耗时 : 64ms
+
+计算1亿个随机Double类型数据之和[单线程], 结果是：result = 49998124.71 耗时 : 114ms
+计算1亿个随机Double类型数据之和[2个线程], 结果是：result = 49998124.71 耗时 : 53ms
+计算1亿个随机Double类型数据之和[10个线程], 结果是：result = 49998124.71 耗时 : 54ms
+
+计算1亿个随机Double类型数据之和[单线程], 结果是：result = 50000309.80 耗时 : 102ms
+计算1亿个随机Double类型数据之和[2个线程], 结果是：result = 50000309.80 耗时 : 53ms
+计算1亿个随机Double类型数据之和[10个线程], 结果是：result = 50000309.80 耗时 : 35ms
+
+计算1亿个随机Double类型数据之和[单线程], 结果是：result = 50001943.57 耗时 : 108ms
+计算1亿个随机Double类型数据之和[2个线程], 结果是：result = 50001943.57 耗时 : 58ms
+计算1亿个随机Double类型数据之和[10个线程], 结果是：result = 50001943.57 耗时 : 41ms
+
+计算1亿个随机Double类型数据之和[单线程], 结果是：result = 49997176.44 耗时 : 102ms
+计算1亿个随机Double类型数据之和[2个线程], 结果是：result = 49997176.44 耗时 : 53ms
+计算1亿个随机Double类型数据之和[10个线程], 结果是：result = 49997176.44 耗时 : 29ms
+
+计算1亿个随机Double类型数据之和[单线程], 结果是：result = 49999627.84 耗时 : 101ms
+计算1亿个随机Double类型数据之和[2个线程], 结果是：result = 49999627.84 耗时 : 53ms
+计算1亿个随机Double类型数据之和[10个线程], 结果是：result = 49999627.84 耗时 : 29ms
+
+计算1亿个随机Double类型数据之和[单线程], 结果是：result = 50001260.16 耗时 : 102ms
+计算1亿个随机Double类型数据之和[2个线程], 结果是：result = 50001260.16 耗时 : 55ms
+计算1亿个随机Double类型数据之和[10个线程], 结果是：result = 50001260.16 耗时 : 28ms
+
+计算1亿个随机Double类型数据之和[单线程], 结果是：result = 49997786.83 耗时 : 101ms
+计算1亿个随机Double类型数据之和[2个线程], 结果是：result = 49997786.83 耗时 : 54ms
+计算1亿个随机Double类型数据之和[10个线程], 结果是：result = 49997786.83 耗时 : 28ms
+
+计算1亿个随机Double类型数据之和[单线程], 结果是：result = 49998955.27 耗时 : 102ms
+计算1亿个随机Double类型数据之和[2个线程], 结果是：result = 49998955.27 耗时 : 54ms
+计算1亿个随机Double类型数据之和[10个线程], 结果是：result = 49998955.27 耗时 : 28ms
+```
+
+可以看到结果中，创建10个线程 不一定会比创建2个线程要执行更快。
+
+
+
 ## 单核CPU设定多线程是否有意义？
 
 有意义，因为线程的操作中可能有不消耗CPU的操作，比如：等待网络的传输，或者线程sleep，此时就可以让出CPU去执行其他线程。可以充分利用CPU资源。
 
 - CPU密集型
 - IO密集型
-
-## 线程数量是不是设置地越大越好？
-
-不是，因为线程切换要消耗资源。
-
-示例：
-
-单线程和多线程来累加1亿个数。
-
-[CountSum.java](https://github.com/GreyZeng/juc/blob/master/src/main/java/git/snippets/juc/CountSum.java)
 
 ## 工作线程数（线程池中线程数量）设多少合适？
 
@@ -157,21 +201,21 @@ N = Ncpu * Ucpu * (1 + W/C)
 
 ```java
 public class ThreadBasicOperation {
-  static volatile int sum = 0;
+    static volatile int sum = 0;
 
-  public static void main(String[] args) throws Exception {
-    Thread t = new Thread(() -> {
-      for (int i = 1; i <= 100; i++) {
-        sum += i;
-      }
-    });
-    t.start();
-    // join 方法表示主线程愿意等待子线程执行完毕后才继续执行
-    // 如果不使用join方法，那么sum输出的可能是一个很小的值，因为还没等子线程
-    // 执行完毕后，主线程就已经执行了打印sum的操作
-    t.join();
-    System.out.println(sum);
-  }
+    public static void main(String[] args) throws Exception {
+        Thread t = new Thread(() -> {
+            for (int i = 1; i <= 100; i++) {
+                sum += i;
+            }
+        });
+        t.start();
+        // join 方法表示主线程愿意等待子线程执行完毕后才继续执行
+        // 如果不使用join方法，那么sum输出的可能是一个很小的值，因为还没等子线程
+        // 执行完毕后，主线程就已经执行了打印sum的操作
+        t.join();
+        System.out.println(sum);
+    }
 }
 ```
 
@@ -208,22 +252,22 @@ public class ThreadBasicOperation {
 
 ```java
 public class ThreadFinished {
-  private static volatile boolean flag = true;
+    private static volatile boolean flag = true;
 
-  public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
 
-    // 推荐方式:设置标志位
-    Thread t3 = new Thread(() -> {
-      long i = 0L;
-      while (flag) {
-        i++;
-      }
-      System.out.println("count sum i = " + i);
-    });
-    t3.start();
-    TimeUnit.SECONDS.sleep(1);
-    flag = false;
-  }
+        // 推荐方式:设置标志位
+        Thread t3 = new Thread(() -> {
+            long i = 0L;
+            while (flag) {
+                i++;
+            }
+            System.out.println("count sum i = " + i);
+        });
+        t3.start();
+        TimeUnit.SECONDS.sleep(1);
+        flag = false;
+    }
 }
 ```
 
@@ -232,18 +276,18 @@ public class ThreadFinished {
 ```java
 public class ThreadFinished {
 
-  public static void main(String[] args) throws InterruptedException {
-    // 推荐方式:使用interrupt
-    Thread t4 = new Thread(() -> {
-      while (!Thread.currentThread().isInterrupted()) {
+    public static void main(String[] args) throws InterruptedException {
+        // 推荐方式:使用interrupt
+        Thread t4 = new Thread(() -> {
+            while (!Thread.currentThread().isInterrupted()) {
 
-      }
-      System.out.println("t4 end");
-    });
-    t4.start();
-    TimeUnit.SECONDS.sleep(1);
-    t4.interrupt();
-  }
+            }
+            System.out.println("t4 end");
+        });
+        t4.start();
+        TimeUnit.SECONDS.sleep(1);
+        t4.interrupt();
+    }
 }
 ```
 
@@ -260,44 +304,44 @@ public class ThreadFinished {
 ```java
 public class ThreadVisible {
 
-  static volatile boolean flag = true;
+    static volatile boolean flag = true;
 
-  public static void main(String[] args) throws InterruptedException {
-    Thread t = new Thread(() -> {
-      while (flag) {
-        // 如果这里调用了System.out.println()
-        // 会无论flag有没有加volatile,数据都会同步
-        // 因为System.out.println()背后调用的synchronized
-        // System.out.println();
-      }
-      System.out.println("t end");
-    });
-    t.start();
-    TimeUnit.SECONDS.sleep(3);
-    flag = false;
+    public static void main(String[] args) throws InterruptedException {
+        Thread t = new Thread(() -> {
+            while (flag) {
+                // 如果这里调用了System.out.println()
+                // 会无论flag有没有加volatile,数据都会同步
+                // 因为System.out.println()背后调用的synchronized
+                // System.out.println();
+            }
+            System.out.println("t end");
+        });
+        t.start();
+        TimeUnit.SECONDS.sleep(3);
+        flag = false;
 
 
-    // volatile修饰引用变量
-    new Thread(a::m, "t2").start();
-    TimeUnit.SECONDS.sleep(2);
-    a.flag = false;
+        // volatile修饰引用变量
+        new Thread(a::m, "t2").start();
+        TimeUnit.SECONDS.sleep(2);
+        a.flag = false;
 
-    // 阻塞主线程,防止主线程直接执行完毕,看不到效果
-    new Scanner(System.in).next();
-  }
-
-  private static volatile A a = new A();
-
-  static class A {
-    boolean flag = true;
-
-    void m() {
-      System.out.println("m start");
-      while (flag) {
-      }
-      System.out.println("m end");
+        // 阻塞主线程,防止主线程直接执行完毕,看不到效果
+        new Scanner(System.in).next();
     }
-  }
+
+    private static volatile A a = new A();
+
+    static class A {
+        boolean flag = true;
+
+        void m() {
+            System.out.println("m start");
+            while (flag) {
+            }
+            System.out.println("m end");
+        }
+    }
 }
 ```
 
@@ -320,42 +364,42 @@ public class ThreadVisible {
 
 ```java
 public class CacheLinePadding {
-  public static T[] arr = new T[2];
+    public static T[] arr = new T[2];
 
-  static {
-    arr[0] = new T();
-    arr[1] = new T();
-  }
+    static {
+        arr[0] = new T();
+        arr[1] = new T();
+    }
 
-  public static void main(String[] args) throws Exception {
-    Thread t1 = new Thread(() -> {
-      for (long i = 0; i < 1000_0000L; i++) {
-        arr[0].x = i;
-      }
-    });
+    public static void main(String[] args) throws Exception {
+        Thread t1 = new Thread(() -> {
+            for (long i = 0; i < 1000_0000L; i++) {
+                arr[0].x = i;
+            }
+        });
 
-    Thread t2 = new Thread(() -> {
-      for (long i = 0; i < 1000_0000L; i++) {
-        arr[1].x = i;
-      }
-    });
+        Thread t2 = new Thread(() -> {
+            for (long i = 0; i < 1000_0000L; i++) {
+                arr[1].x = i;
+            }
+        });
 
-    final long start = System.nanoTime();
-    t1.start();
-    t2.start();
-    t1.join();
-    t2.join();
-    System.out.println((System.nanoTime() - start) / 100_0000);
-  }
+        final long start = System.nanoTime();
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        System.out.println((System.nanoTime() - start) / 100_0000);
+    }
 
-  private static class Padding {
-    public volatile long p1, p2, p3, p4, p5, p6, p7;
-  }
+    private static class Padding {
+        public volatile long p1, p2, p3, p4, p5, p6, p7;
+    }
 
-  private static class T /**extends Padding*/
-  {
-    public volatile long x = 0L;
-  }
+    private static class T /**extends Padding*/
+    {
+        public volatile long x = 0L;
+    }
 }
 
 ```
@@ -387,52 +431,52 @@ CPU为每个缓存行标记四种状态（使用两位）
 
 ```java
 public class DisOrder {
-  private static int x = 0, y = 0;
-  private static int a = 0, b = 0;
+    private static int x = 0, y = 0;
+    private static int a = 0, b = 0;
 
-  // 以下程序可能会执行比较长的时间
-  public static void main(String[] args) throws InterruptedException {
-    int i = 0;
-    for (; ; ) {
-      i++;
-      x = 0;
-      y = 0;
-      a = 0;
-      b = 0;
-      Thread one = new Thread(() -> {
-        // 由于线程one先启动，下面这句话让它等一等线程two. 读着可根据自己电脑的实际性能适当调整等待时间.
-        shortWait(100000);
-        a = 1;
-        x = b;
-      });
+    // 以下程序可能会执行比较长的时间
+    public static void main(String[] args) throws InterruptedException {
+        int i = 0;
+        for (; ; ) {
+            i++;
+            x = 0;
+            y = 0;
+            a = 0;
+            b = 0;
+            Thread one = new Thread(() -> {
+                // 由于线程one先启动，下面这句话让它等一等线程two. 读着可根据自己电脑的实际性能适当调整等待时间.
+                shortWait(100000);
+                a = 1;
+                x = b;
+            });
 
-      Thread other = new Thread(() -> {
-        b = 1;
-        y = a;
-      });
-      one.start();
-      other.start();
-      one.join();
-      other.join();
-      String result = "第" + i + "次 (" + x + "," + y + "）";
-      if (x == 0 && y == 0) {
-        // 出现这个分支，说明指令出现了重排
-        // 否则不可能 x和y同时都为0
-        System.err.println(result);
-        break;
-      } else {
-        // System.out.println(result);
-      }
+            Thread other = new Thread(() -> {
+                b = 1;
+                y = a;
+            });
+            one.start();
+            other.start();
+            one.join();
+            other.join();
+            String result = "第" + i + "次 (" + x + "," + y + "）";
+            if (x == 0 && y == 0) {
+                // 出现这个分支，说明指令出现了重排
+                // 否则不可能 x和y同时都为0
+                System.err.println(result);
+                break;
+            } else {
+                // System.out.println(result);
+            }
+        }
     }
-  }
 
-  public static void shortWait(long interval) {
-    long start = System.nanoTime();
-    long end;
-    do {
-      end = System.nanoTime();
-    } while (start + interval >= end);
-  }
+    public static void shortWait(long interval) {
+        long start = System.nanoTime();
+        long end;
+        do {
+            end = System.nanoTime();
+        } while (start + interval >= end);
+    }
 }
 ```
 
@@ -448,7 +492,7 @@ public class DisOrder {
 
 ```java
 class T {
-  m =9;
+    m =9;
 }
 ```
 
@@ -460,26 +504,26 @@ volatile一方面可以保证线程数据之间的可见性，另外一方面，
 
 ```java
 public class Singleton6 {
-  private volatile static Singleton6 INSTANCE;
+    private volatile static Singleton6 INSTANCE;
 
-  private Singleton6() {
-  }
-
-  public static Singleton6 getInstance() {
-    if (INSTANCE == null) {
-      synchronized (Singleton6.class) {
-        if (INSTANCE == null) {
-          try {
-            Thread.sleep(1);
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-          INSTANCE = new Singleton6();
-        }
-      }
+    private Singleton6() {
     }
-    return INSTANCE;
-  }
+
+    public static Singleton6 getInstance() {
+        if (INSTANCE == null) {
+            synchronized (Singleton6.class) {
+                if (INSTANCE == null) {
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    INSTANCE = new Singleton6();
+                }
+            }
+        }
+        return INSTANCE;
+    }
 }
 ```
 
@@ -546,9 +590,9 @@ jdk早期是重量级别锁 ，通过0x80中断 进行用户态和内核态转�
 ```xml
 
 <dependency>
-  <groupId>org.openjdk.jol</groupId>
-  <artifactId>jol-core</artifactId>
-  <version>0.15</version>
+    <groupId>org.openjdk.jol</groupId>
+    <artifactId>jol-core</artifactId>
+    <version>0.15</version>
 </dependency>
 ```
 
@@ -556,11 +600,11 @@ jdk早期是重量级别锁 ，通过0x80中断 进行用户态和内核态转�
 
 ```java
 public class ObjectModel {
-  public static void main(String[] args) {
-    T o = new T();
-    String s = ClassLayout.parseInstance(o).toPrintable();
-    System.out.println(s);
-  }
+    public static void main(String[] args) {
+        T o = new T();
+        String s = ClassLayout.parseInstance(o).toPrintable();
+        System.out.println(s);
+    }
 }
 
 class T {
@@ -596,8 +640,8 @@ Space losses: 0 bytes internal + 4 bytes external = 4 bytes total
 
 ```java
 class T {
-  public int a = 3;
-  public long b = 3l;
+    public int a = 3;
+    public long b = 3l;
 }
 ```
 
@@ -645,26 +689,26 @@ Space losses: 0 bytes internal + 0 bytes external = 0 bytes total
 
 ```java
 public class ExceptionCauseUnLock {
-  /*volatile */ boolean stop = false;
+    /*volatile */ boolean stop = false;
 
-  public static void main(String[] args) {
-    ExceptionCauseUnLock t = new ExceptionCauseUnLock();
-    new Thread(t::m, "t1").start();
-    try {
-      TimeUnit.SECONDS.sleep(4);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
+    public static void main(String[] args) {
+        ExceptionCauseUnLock t = new ExceptionCauseUnLock();
+        new Thread(t::m, "t1").start();
+        try {
+            TimeUnit.SECONDS.sleep(4);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (t.stop) {
+            int m = 1 / 0;
+        }
     }
-    if (t.stop) {
-      int m = 1 / 0;
-    }
-  }
 
-  synchronized void m() {
-    while (!stop) {
-      stop = true;
+    synchronized void m() {
+        while (!stop) {
+            stop = true;
+        }
     }
-  }
 }
 ```
 
@@ -706,29 +750,29 @@ synchronized是可重入锁 可重入次数必须记录，因为解锁需要对�
 
 ```java
 public class SynchronizedObject implements Runnable {
-  static SynchronizedObject instance = new SynchronizedObject();
-  final Object object = new Object();
-  static volatile int i = 0;
+    static SynchronizedObject instance = new SynchronizedObject();
+    final Object object = new Object();
+    static volatile int i = 0;
 
-  @Override
-  public void run() {
-    for (int j = 0; j < 1000000; j++) {
-      // 任何线程要执行下面的代码，必须先拿到object的锁
-      synchronized (object) {
-        i++;
-      }
+    @Override
+    public void run() {
+        for (int j = 0; j < 1000000; j++) {
+            // 任何线程要执行下面的代码，必须先拿到object的锁
+            synchronized (object) {
+                i++;
+            }
+        }
     }
-  }
 
-  public static void main(String[] args) throws InterruptedException {
-    Thread t1 = new Thread(instance);
-    Thread t2 = new Thread(instance);
-    t1.start();
-    t2.start();
-    t1.join();
-    t2.join();
-    System.out.println(i);
-  }
+    public static void main(String[] args) throws InterruptedException {
+        Thread t1 = new Thread(instance);
+        Thread t2 = new Thread(instance);
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        System.out.println(i);
+    }
 }
 ```
 
@@ -738,30 +782,30 @@ public class SynchronizedObject implements Runnable {
 
 ```java
 public class SynchronizedStatic implements Runnable {
-  static SynchronizedStatic instance = new SynchronizedStatic();
-  static volatile int i = 0;
+    static SynchronizedStatic instance = new SynchronizedStatic();
+    static volatile int i = 0;
 
-  @Override
-  public void run() {
-    increase();
-  }
-
-  // 相当于synchronized(SynchronizedStatic.class)
-  synchronized static void increase() {
-    for (int j = 0; j < 1000000; j++) {
-      i++;
+    @Override
+    public void run() {
+        increase();
     }
-  }
 
-  public static void main(String[] args) throws InterruptedException {
-    Thread t1 = new Thread(instance);
-    Thread t2 = new Thread(instance);
-    t1.start();
-    t2.start();
-    t1.join();
-    t2.join();
-    System.out.println(i);
-  }
+    // 相当于synchronized(SynchronizedStatic.class)
+    synchronized static void increase() {
+        for (int j = 0; j < 1000000; j++) {
+            i++;
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        Thread t1 = new Thread(instance);
+        Thread t2 = new Thread(instance);
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        System.out.println(i);
+    }
 }
 ```
 
@@ -769,32 +813,32 @@ public class SynchronizedStatic implements Runnable {
 
 ```java
 public class SynchronizedMethod implements Runnable {
-  static SynchronizedMethod instance = new SynchronizedMethod();
-  static volatile int i = 0;
+    static SynchronizedMethod instance = new SynchronizedMethod();
+    static volatile int i = 0;
 
-  @Override
-  public void run() {
-    increase();
-  }
-
-  void increase() {
-    for (int j = 0; j < 1000000; j++) {
-      // 任何线程要执行下面的代码，必须先拿到object的锁
-      synchronized (this) {
-        i++;
-      }
+    @Override
+    public void run() {
+        increase();
     }
-  }
 
-  public static void main(String[] args) throws InterruptedException {
-    Thread t1 = new Thread(instance);
-    Thread t2 = new Thread(instance);
-    t1.start();
-    t2.start();
-    t1.join();
-    t2.join();
-    System.out.println(i);
-  }
+    void increase() {
+        for (int j = 0; j < 1000000; j++) {
+            // 任何线程要执行下面的代码，必须先拿到object的锁
+            synchronized (this) {
+                i++;
+            }
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        Thread t1 = new Thread(instance);
+        Thread t2 = new Thread(instance);
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        System.out.println(i);
+    }
 }
 ```
 
@@ -802,45 +846,45 @@ public class SynchronizedMethod implements Runnable {
 
 ```java
 public class DirtyRead {
-  String name;
-  double balance;
+    String name;
+    double balance;
 
-  public static void main(String[] args) {
-    DirtyRead a = new DirtyRead();
-    Thread thread = new Thread(() -> a.set("zhangsan", 100.0));
+    public static void main(String[] args) {
+        DirtyRead a = new DirtyRead();
+        Thread thread = new Thread(() -> a.set("zhangsan", 100.0));
 
-    thread.start();
-    try {
-      TimeUnit.SECONDS.sleep(1);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-    System.out.println(a.getBalance("zhangsan"));
-    try {
-      TimeUnit.SECONDS.sleep(2);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-    System.out.println(a.getBalance("zhangsan"));
-  }
-
-  public synchronized void set(String name, double balance) {
-    this.name = name;
-
-    try {
-      Thread.sleep(2000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
+        thread.start();
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(a.getBalance("zhangsan"));
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(a.getBalance("zhangsan"));
     }
 
+    public synchronized void set(String name, double balance) {
+        this.name = name;
 
-    this.balance = balance;
-  }
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-  // 如果get方法不加synchronized关键字，就会出现脏读情况
-  public /*synchronized*/ double getBalance(String name) {
-    return this.balance;
-  }
+
+        this.balance = balance;
+    }
+
+    // 如果get方法不加synchronized关键字，就会出现脏读情况
+    public /*synchronized*/ double getBalance(String name) {
+        return this.balance;
+    }
 }
 ```
 
@@ -854,32 +898,32 @@ public class DirtyRead {
 
 ```java
 public class SynchronizedReentry implements Runnable {
-  public static void main(String[] args) throws IOException {
-    SynchronizedReentry myRun = new SynchronizedReentry();
-    Thread thread = new Thread(myRun, "t1");
-    Thread thread2 = new Thread(myRun, "t2");
-    thread.start();
-    thread2.start();
-    System.in.read();
+    public static void main(String[] args) throws IOException {
+        SynchronizedReentry myRun = new SynchronizedReentry();
+        Thread thread = new Thread(myRun, "t1");
+        Thread thread2 = new Thread(myRun, "t2");
+        thread.start();
+        thread2.start();
+        System.in.read();
 
-  }
+    }
 
-  synchronized void m1(String content) {
-    System.out.println(this);
-    System.out.println("m1 get content is " + content);
-    m2(content);
-  }
+    synchronized void m1(String content) {
+        System.out.println(this);
+        System.out.println("m1 get content is " + content);
+        m2(content);
+    }
 
-  synchronized void m2(String content) {
-    System.out.println(this);
-    System.out.println("m2 get content is " + content);
+    synchronized void m2(String content) {
+        System.out.println(this);
+        System.out.println("m2 get content is " + content);
 
-  }
+    }
 
-  @Override
-  public void run() {
-    m1(Thread.currentThread().getName());
-  }
+    @Override
+    public void run() {
+        m1(Thread.currentThread().getName());
+    }
 }
 
 ```
@@ -912,50 +956,50 @@ synchronized (Object)
 
 ```java
 public class DeadLock implements Runnable {
-  int flag = 1;
-  static Object o1 = new Object();
-  static Object o2 = new Object();
+    int flag = 1;
+    static Object o1 = new Object();
+    static Object o2 = new Object();
 
-  public static void main(String[] args) {
-    DeadLock lock = new DeadLock();
-    DeadLock lock2 = new DeadLock();
-    lock.flag = 1;
-    lock2.flag = 0;
-    Thread t1 = new Thread(lock);
-    Thread t2 = new Thread(lock2);
-    t1.start();
-    t2.start();
-  }
-
-  @Override
-  public void run() {
-    System.out.println("flag = " + flag);
-    if (flag == 1) {
-      synchronized (o2) {
-        try {
-          Thread.sleep(500);
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-        synchronized (o1) {
-          System.out.println("1");
-        }
-      }
+    public static void main(String[] args) {
+        DeadLock lock = new DeadLock();
+        DeadLock lock2 = new DeadLock();
+        lock.flag = 1;
+        lock2.flag = 0;
+        Thread t1 = new Thread(lock);
+        Thread t2 = new Thread(lock2);
+        t1.start();
+        t2.start();
     }
-    if (flag == 0) {
-      synchronized (o1) {
-        try {
-          Thread.sleep(500);
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
 
-        synchronized (o2) {
-          System.out.println("0");
+    @Override
+    public void run() {
+        System.out.println("flag = " + flag);
+        if (flag == 1) {
+            synchronized (o2) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                synchronized (o1) {
+                    System.out.println("1");
+                }
+            }
         }
-      }
+        if (flag == 0) {
+            synchronized (o1) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                synchronized (o2) {
+                    System.out.println("0");
+                }
+            }
+        }
     }
-  }
 }
 ```
 
@@ -969,30 +1013,30 @@ SynchronizedBasicType.java
 
 ```java
 public class SyncSameObject {
-  Object object = new Object();
+    Object object = new Object();
 
-  public static void main(String[] args) {
-    SyncSameObject t = new SyncSameObject();
-    new Thread(t::m).start();
-    Thread t2 = new Thread(t::m, "t2");
-    //锁对象发生改变，所以t2线程得以执行，如果注释掉这句话，线程2将永远得不到执行机会
-    t.object = new Object();
+    public static void main(String[] args) {
+        SyncSameObject t = new SyncSameObject();
+        new Thread(t::m).start();
+        Thread t2 = new Thread(t::m, "t2");
+        //锁对象发生改变，所以t2线程得以执行，如果注释掉这句话，线程2将永远得不到执行机会
+        t.object = new Object();
 
-    t2.start();
-  }
-
-  void m() {
-    synchronized (object) {
-      while (true) {
-        try {
-          TimeUnit.SECONDS.sleep(2);
-          System.out.println("current thread is " + Thread.currentThread().getName());
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-      }
+        t2.start();
     }
-  }
+
+    void m() {
+        synchronized (object) {
+            while (true) {
+                try {
+                    TimeUnit.SECONDS.sleep(2);
+                    System.out.println("current thread is " + Thread.currentThread().getName());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }
 ```
 
@@ -1015,45 +1059,45 @@ CPU原来执行指令一步一步执行，现在是流水线执行，编译以�
 
 ```java
 public class VolatileNOTAtomic {
-  volatile static Data data;
+    volatile static Data data;
 
-  public static void main(String[] args) {
-    Thread writer = new Thread(() -> {
-      for (int i = 0; i < 10000; i++) {
-        data = new Data(i, i);
-      }
-    });
+    public static void main(String[] args) {
+        Thread writer = new Thread(() -> {
+            for (int i = 0; i < 10000; i++) {
+                data = new Data(i, i);
+            }
+        });
 
-    Thread reader = new Thread(() -> {
-      while (data == null) {
-      }
-      int a = data.a;
-      int b = data.b;
-      if (a != b) {
-        // 会出现这种情况是因为new Data(i,i)非原子操作，会产生中间状态的对象，导致a和b的值会不一致
-        System.out.printf("a = %s, b=%s%n", a, b);
-      }
-    });
-    writer.start();
-    reader.start();
-    try {
-      writer.join();
-      reader.join();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
+        Thread reader = new Thread(() -> {
+            while (data == null) {
+            }
+            int a = data.a;
+            int b = data.b;
+            if (a != b) {
+                // 会出现这种情况是因为new Data(i,i)非原子操作，会产生中间状态的对象，导致a和b的值会不一致
+                System.out.printf("a = %s, b=%s%n", a, b);
+            }
+        });
+        writer.start();
+        reader.start();
+        try {
+            writer.join();
+            reader.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("end");
     }
-    System.out.println("end");
-  }
 
-  public static class Data {
-    int a;
-    int b;
+    public static class Data {
+        int a;
+        int b;
 
-    Data(int a, int b) {
-      this.a = a;
-      this.b = b;
+        Data(int a, int b) {
+            this.a = a;
+            this.b = b;
+        }
     }
-  }
 }
 ```
 
@@ -1061,48 +1105,48 @@ volatile并不能保证多个线程共同修改running变量时所带来的不�
 
 ```java
 public class VolatileCanNotReplaceSynchronized {
-  volatile int count = 0;
-  int count2 = 0;
+    volatile int count = 0;
+    int count2 = 0;
 
-  public static void main(String[] args) {
-    VolatileCanNotReplaceSynchronized t = new VolatileCanNotReplaceSynchronized();
-    List<Thread> threads = new ArrayList<>();
-    List<Thread> threads2 = new ArrayList<>();
-    for (int i = 0; i < 20; i++) {
-      threads.add(new Thread(t::m));
-      threads2.add(new Thread(t::m2));
+    public static void main(String[] args) {
+        VolatileCanNotReplaceSynchronized t = new VolatileCanNotReplaceSynchronized();
+        List<Thread> threads = new ArrayList<>();
+        List<Thread> threads2 = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            threads.add(new Thread(t::m));
+            threads2.add(new Thread(t::m2));
+        }
+        threads.forEach(item -> item.start());
+        threads2.forEach(item -> item.start());
+        threads.forEach(item -> {
+            try {
+                item.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        threads2.forEach(item -> {
+            try {
+                item.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        System.out.println(t.count);
+        System.out.println(t.count2);
     }
-    threads.forEach(item -> item.start());
-    threads2.forEach(item -> item.start());
-    threads.forEach(item -> {
-      try {
-        item.join();
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-    });
-    threads2.forEach(item -> {
-      try {
-        item.join();
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-    });
-    System.out.println(t.count);
-    System.out.println(t.count2);
-  }
 
-  void m() {
-    for (int i = 0; i < 1000; i++) {
-      count++;
+    void m() {
+        for (int i = 0; i < 1000; i++) {
+            count++;
+        }
     }
-  }
 
-  synchronized void m2() {
-    for (int i = 0; i < 1000; i++) {
-      count2++;
+    synchronized void m2() {
+        for (int i = 0; i < 1000; i++) {
+            count2++;
+        }
     }
-  }
 }
 ```
 
@@ -1112,26 +1156,26 @@ DCL示例:
 
 ```java
 public class Singleton6 {
-  private volatile static Singleton6 INSTANCE;
+    private volatile static Singleton6 INSTANCE;
 
-  private Singleton6() {
-  }
-
-  public static Singleton6 getInstance() {
-    if (INSTANCE == null) {
-      synchronized (Singleton6.class) {
-        if (INSTANCE == null) {
-          try {
-            Thread.sleep(1);
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-          INSTANCE = new Singleton6();
-        }
-      }
+    private Singleton6() {
     }
-    return INSTANCE;
-  }
+
+    public static Singleton6 getInstance() {
+        if (INSTANCE == null) {
+            synchronized (Singleton6.class) {
+                if (INSTANCE == null) {
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    INSTANCE = new Singleton6();
+                }
+            }
+        }
+        return INSTANCE;
+    }
 }
 ```
 
@@ -1204,42 +1248,42 @@ public class Singleton6 {
 ```java
 public class ReentrantLockReadAndWrite {
 
-  private static ReentrantReadWriteLock reentrantLock = new ReentrantReadWriteLock();
-  private static ReentrantReadWriteLock.ReadLock readLock = reentrantLock.readLock();
-  private static ReentrantReadWriteLock.WriteLock writeLock = reentrantLock.writeLock();
+    private static ReentrantReadWriteLock reentrantLock = new ReentrantReadWriteLock();
+    private static ReentrantReadWriteLock.ReadLock readLock = reentrantLock.readLock();
+    private static ReentrantReadWriteLock.WriteLock writeLock = reentrantLock.writeLock();
 
-  public static void read() {
-    readLock.lock();
-    try {
-      System.out.println(Thread.currentThread().getName() + "获取读锁，开始执行");
-      Thread.sleep(1000);
-    } catch (Exception e) {
-      e.printStackTrace();
-    } finally {
-      readLock.unlock();
-      System.out.println(Thread.currentThread().getName() + "释放读锁");
+    public static void read() {
+        readLock.lock();
+        try {
+            System.out.println(Thread.currentThread().getName() + "获取读锁，开始执行");
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            readLock.unlock();
+            System.out.println(Thread.currentThread().getName() + "释放读锁");
+        }
     }
-  }
 
-  public static void write() {
-    writeLock.lock();
-    try {
-      System.out.println(Thread.currentThread().getName() + "获取写锁，开始执行");
-      Thread.sleep(1000);
-    } catch (Exception e) {
-      e.printStackTrace();
-    } finally {
-      writeLock.unlock();
-      System.out.println(Thread.currentThread().getName() + "释放写锁");
+    public static void write() {
+        writeLock.lock();
+        try {
+            System.out.println(Thread.currentThread().getName() + "获取写锁，开始执行");
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            writeLock.unlock();
+            System.out.println(Thread.currentThread().getName() + "释放写锁");
+        }
     }
-  }
 
-  public static void main(String[] args) {
-    new Thread(() -> read(), "Thread1").start();
-    new Thread(() -> read(), "Thread2").start();
-    new Thread(() -> write(), "Thread3").start();
-    new Thread(() -> write(), "Thread4").start();
-  }
+    public static void main(String[] args) {
+        new Thread(() -> read(), "Thread1").start();
+        new Thread(() -> read(), "Thread2").start();
+        new Thread(() -> write(), "Thread3").start();
+        new Thread(() -> write(), "Thread4").start();
+    }
 }
 ```
 
@@ -1285,71 +1329,71 @@ public class ReentrantLockReadAndWrite {
 
 ```java
 public class CountDownLatchAndJoin {
-  public static void main(String[] args) {
-    useCountDownLatch();
-    useJoin();
-  }
+    public static void main(String[] args) {
+        useCountDownLatch();
+        useJoin();
+    }
 
-  public static void useCountDownLatch() {
-    // use countdownlatch
-    long start = System.currentTimeMillis();
-    Thread[] threads = new Thread[100000];
-    CountDownLatch latch = new CountDownLatch(threads.length);
+    public static void useCountDownLatch() {
+        // use countdownlatch
+        long start = System.currentTimeMillis();
+        Thread[] threads = new Thread[100000];
+        CountDownLatch latch = new CountDownLatch(threads.length);
 
-    for (int i = 0; i < threads.length; i++) {
-      threads[i] = new Thread(() -> {
-        int result = 0;
-        for (int i1 = 0; i1 < 1000; i1++) {
-          result += i1;
+        for (int i = 0; i < threads.length; i++) {
+            threads[i] = new Thread(() -> {
+                int result = 0;
+                for (int i1 = 0; i1 < 1000; i1++) {
+                    result += i1;
+                }
+                // System.out.println("Current thread " + Thread.currentThread().getName() + " finish cal result " + result);
+                latch.countDown();
+            });
         }
-        // System.out.println("Current thread " + Thread.currentThread().getName() + " finish cal result " + result);
-        latch.countDown();
-      });
-    }
-    for (Thread thread : threads) {
-      thread.start();
-    }
-    try {
-      latch.await();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-    long end = System.currentTimeMillis();
-
-    System.out.println("end latch down, time is " + (end - start));
-
-  }
-
-  public static void useJoin() {
-    long start = System.currentTimeMillis();
-
-    // use join
-    Thread[] threads = new Thread[100000];
-
-    for (int i = 0; i < threads.length; i++) {
-      threads[i] = new Thread(() -> {
-        int result = 0;
-        for (int i1 = 0; i1 < 1000; i1++) {
-          result += i1;
+        for (Thread thread : threads) {
+            thread.start();
         }
-        // System.out.println("Current thread " + Thread.currentThread().getName() + " finish cal result " + result);
-      });
-    }
-    for (Thread thread : threads) {
-      thread.start();
-    }
-    for (Thread thread : threads) {
-      try {
-        thread.join();
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        long end = System.currentTimeMillis();
+
+        System.out.println("end latch down, time is " + (end - start));
+
     }
 
-    long end = System.currentTimeMillis();
+    public static void useJoin() {
+        long start = System.currentTimeMillis();
 
-    System.out.println("end join, time is " + (end - start));
-  }
+        // use join
+        Thread[] threads = new Thread[100000];
+
+        for (int i = 0; i < threads.length; i++) {
+            threads[i] = new Thread(() -> {
+                int result = 0;
+                for (int i1 = 0; i1 < 1000; i1++) {
+                    result += i1;
+                }
+                // System.out.println("Current thread " + Thread.currentThread().getName() + " finish cal result " + result);
+            });
+        }
+        for (Thread thread : threads) {
+            thread.start();
+        }
+        for (Thread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        long end = System.currentTimeMillis();
+
+        System.out.println("end join, time is " + (end - start));
+    }
 }
 ```
 
@@ -1388,99 +1432,99 @@ public class CountDownLatchAndJoin {
 
 ```java
 public class PhaserUsage {
-  static final Random R = new Random();
-  static WeddingPhaser phaser = new WeddingPhaser();
+    static final Random R = new Random();
+    static WeddingPhaser phaser = new WeddingPhaser();
 
-  static void millSleep() {
-    try {
-      TimeUnit.MILLISECONDS.sleep(R.nextInt(1000));
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-  }
-
-  public static void main(String[] args) {
-    // 宾客的人数
-    final int guestNum = 5;
-    // 新郎和新娘
-    final int mainNum = 2;
-    phaser.bulkRegister(mainNum + guestNum);
-    for (int i = 0; i < guestNum; i++) {
-      new Thread(new Person("宾客" + i)).start();
-    }
-    new Thread(new Person("新娘")).start();
-    new Thread(new Person("新郎")).start();
-  }
-
-  static class WeddingPhaser extends Phaser {
-    @Override
-    protected boolean onAdvance(int phase, int registeredParties) {
-      switch (phase) {
-        case 0:
-          System.out.println("所有人到齐");
-          return false;
-        case 1:
-          System.out.println("所有人吃饭");
-          return false;
-        case 2:
-          System.out.println("所有人离开");
-          return false;
-        case 3:
-          System.out.println("新郎新娘入拥抱");
-          return true;
-        default:
-          return true;
-      }
-    }
-  }
-
-  static class Person implements Runnable {
-    String name;
-
-    Person(String name) {
-      this.name = name;
+    static void millSleep() {
+        try {
+            TimeUnit.MILLISECONDS.sleep(R.nextInt(1000));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    @Override
-    public void run() {
-      // 先到达婚礼现场
-      arrive();
-      // 吃饭
-      eat();
-      // 离开
-      leave();
-      // 拥抱，只保留新郎和新娘两个线程可以执行
-      hug();
+    public static void main(String[] args) {
+        // 宾客的人数
+        final int guestNum = 5;
+        // 新郎和新娘
+        final int mainNum = 2;
+        phaser.bulkRegister(mainNum + guestNum);
+        for (int i = 0; i < guestNum; i++) {
+            new Thread(new Person("宾客" + i)).start();
+        }
+        new Thread(new Person("新娘")).start();
+        new Thread(new Person("新郎")).start();
     }
 
-    private void arrive() {
-      millSleep();
-      System.out.println("name:" + name + " 到来");
-      phaser.arriveAndAwaitAdvance();
+    static class WeddingPhaser extends Phaser {
+        @Override
+        protected boolean onAdvance(int phase, int registeredParties) {
+            switch (phase) {
+                case 0:
+                    System.out.println("所有人到齐");
+                    return false;
+                case 1:
+                    System.out.println("所有人吃饭");
+                    return false;
+                case 2:
+                    System.out.println("所有人离开");
+                    return false;
+                case 3:
+                    System.out.println("新郎新娘入拥抱");
+                    return true;
+                default:
+                    return true;
+            }
+        }
     }
 
-    private void eat() {
-      millSleep();
-      System.out.println("name:" + name + " 吃饭");
-      phaser.arriveAndAwaitAdvance();
-    }
+    static class Person implements Runnable {
+        String name;
 
-    private void leave() {
-      millSleep();
-      System.out.println("name:" + name + " 离开");
-      phaser.arriveAndAwaitAdvance();
-    }
+        Person(String name) {
+            this.name = name;
+        }
 
-    private void hug() {
-      if ("新娘".equals(name) || "新郎".equals(name)) {
-        millSleep();
-        System.out.println("新娘新郎拥抱");
-        phaser.arriveAndAwaitAdvance();
-      } else {
-        phaser.arriveAndDeregister();
-      }
+        @Override
+        public void run() {
+            // 先到达婚礼现场
+            arrive();
+            // 吃饭
+            eat();
+            // 离开
+            leave();
+            // 拥抱，只保留新郎和新娘两个线程可以执行
+            hug();
+        }
+
+        private void arrive() {
+            millSleep();
+            System.out.println("name:" + name + " 到来");
+            phaser.arriveAndAwaitAdvance();
+        }
+
+        private void eat() {
+            millSleep();
+            System.out.println("name:" + name + " 吃饭");
+            phaser.arriveAndAwaitAdvance();
+        }
+
+        private void leave() {
+            millSleep();
+            System.out.println("name:" + name + " 离开");
+            phaser.arriveAndAwaitAdvance();
+        }
+
+        private void hug() {
+            if ("新娘".equals(name) || "新郎".equals(name)) {
+                millSleep();
+                System.out.println("新娘新郎拥抱");
+                phaser.arriveAndAwaitAdvance();
+            } else {
+                phaser.arriveAndDeregister();
+            }
+        }
     }
-  }
 }
 ```
 
@@ -1529,32 +1573,32 @@ StampedLock其实是对读写锁的一种改进，它支持在读同时进行一
 
 ```java
 public class C08_04_Semaphore {
-  public static void main(String[] args) {
-    Semaphore semaphore = new Semaphore(1);
-    new Thread(() -> {
-      try {
-        semaphore.acquire();
-        TimeUnit.SECONDS.sleep(2);
-        System.out.println("Thread 1 executed");
-      } catch (Exception e) {
-        e.printStackTrace();
-      } finally {
-        semaphore.release();
-      }
-    }).start();
+    public static void main(String[] args) {
+        Semaphore semaphore = new Semaphore(1);
+        new Thread(() -> {
+            try {
+                semaphore.acquire();
+                TimeUnit.SECONDS.sleep(2);
+                System.out.println("Thread 1 executed");
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                semaphore.release();
+            }
+        }).start();
 
-    new Thread(() -> {
-      try {
-        semaphore.acquire();
-        TimeUnit.SECONDS.sleep(2);
-        System.out.println("Thread 2 executed");
-      } catch (Exception e) {
-        e.printStackTrace();
-      } finally {
-        semaphore.release();
-      }
-    }).start();
-  }
+        new Thread(() -> {
+            try {
+                semaphore.acquire();
+                TimeUnit.SECONDS.sleep(2);
+                System.out.println("Thread 2 executed");
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                semaphore.release();
+            }
+        }).start();
+    }
 }
 ```
 
@@ -1566,30 +1610,30 @@ public class C08_04_Semaphore {
 
 ```java
 public class ExchangerUsage {
-  static Exchanger<String> semaphore = new Exchanger<>();
+    static Exchanger<String> semaphore = new Exchanger<>();
 
-  public static void main(String[] args) {
-    new Thread(() -> {
-      String s = "T1";
-      try {
-        s = semaphore.exchange(s);
-        TimeUnit.SECONDS.sleep(2);
-        System.out.println("Thread 1(T1) executed, Result is " + s);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }).start();
-    new Thread(() -> {
-      String s = "T2";
-      try {
-        s = semaphore.exchange(s);
-        TimeUnit.SECONDS.sleep(2);
-        System.out.println("Thread 2(T2) executed, Result is " + s);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }).start();
-  }
+    public static void main(String[] args) {
+        new Thread(() -> {
+            String s = "T1";
+            try {
+                s = semaphore.exchange(s);
+                TimeUnit.SECONDS.sleep(2);
+                System.out.println("Thread 1(T1) executed, Result is " + s);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+        new Thread(() -> {
+            String s = "T2";
+            try {
+                s = semaphore.exchange(s);
+                TimeUnit.SECONDS.sleep(2);
+                System.out.println("Thread 2(T2) executed, Result is " + s);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
 }
 
 ```
@@ -1606,35 +1650,35 @@ public class ExchangerUsage {
 
 ```java
 public class LockSupportUsage {
-  public static void main(String[] args) {
-    Thread t = new Thread(() -> {
-      for (int i = 0; i < 10; i++) {
+    public static void main(String[] args) {
+        Thread t = new Thread(() -> {
+            for (int i = 0; i < 10; i++) {
+                try {
+                    if (i == 5) {
+                        LockSupport.park();
+                    }
+                    if (i == 8) {
+                        LockSupport.park();
+                    }
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.println(i);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        t.start();
+        // unpark可以先于park调用
+        //LockSupport.unpark(t);
         try {
-          if (i == 5) {
-            LockSupport.park();
-          }
-          if (i == 8) {
-            LockSupport.park();
-          }
-          TimeUnit.SECONDS.sleep(1);
-          System.out.println(i);
+            TimeUnit.SECONDS.sleep(8);
         } catch (InterruptedException e) {
-          e.printStackTrace();
+            e.printStackTrace();
         }
-      }
-    });
-    t.start();
-    // unpark可以先于park调用
-    //LockSupport.unpark(t);
-    try {
-      TimeUnit.SECONDS.sleep(8);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
 
-    LockSupport.unpark(t);
-    System.out.println("after 8 seconds");
-  }
+        LockSupport.unpark(t);
+        System.out.println("after 8 seconds");
+    }
 }
 ```
 
@@ -1671,11 +1715,11 @@ set方法
         Thread t = Thread.currentThread();
         ThreadLocalMap map = getMap(t);
         if (map != null) {
-        map.set(this, value); // 将变量设置到了当前线程对象的某个Map中
+            map.set(this, value); // 将变量设置到了当前线程对象的某个Map中
         } else {
-        createMap(t, value);
+            createMap(t, value);
         }
-        }
+    }
 ```
 
 get方法
@@ -1685,15 +1729,15 @@ get方法
         Thread t = Thread.currentThread();
         ThreadLocalMap map = getMap(t);
         if (map != null) {
-        ThreadLocalMap.Entry e = map.getEntry(this);
-        if (e != null) {
-@SuppressWarnings("unchecked")
+            ThreadLocalMap.Entry e = map.getEntry(this);
+            if (e != null) {
+                @SuppressWarnings("unchecked")
                 T result = (T)e.value;
-                        return result;
-                        }
-                        }
-                        return setInitialValue();
-                        }
+                return result;
+            }
+        }
+        return setInitialValue();
+    }
 ```
 
 ThreadLocal的一个应用
@@ -1712,19 +1756,19 @@ ThreadLocal的一个应用
 
 ```java
 public class NormalRef {
-  public static void main(String[] args) throws IOException {
-    M m = new M();
-    m = null;
-    System.gc();
-    System.in.read();
-  }
-  static class M {
-    M() {}
-    @Override
-    protected void finalize() throws Throwable {
-      System.out.println("finalized");
+    public static void main(String[] args) throws IOException {
+        M m = new M();
+        m = null;
+        System.gc();
+        System.in.read();
     }
-  }
+    static class M {
+    	M() {}
+        @Override
+        protected void finalize() throws Throwable {
+            System.out.println("finalized");
+        }
+    }
 }
 ```
 
