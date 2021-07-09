@@ -417,11 +417,29 @@ public class CacheLinePadding {
 CPU为每个缓存行标记四种状态（使用两位）
 
 - Exclusive
+
+> 代表该缓存行对应内存中的内容只被该CPU缓存，其他CPU没有缓存该缓存对应内存行中的内容。这个状态的缓存行中的内容和内存中的内容一致。该缓存可以在任何其他CPU读取该缓存对应内存中的内容时变成Shared状态。或者本地处理器写该缓存就会变成Modified状态。
+
 - Invalid
+
+> 代表该缓存行中的内容是无效的。
+
 - Shared
+
+> 该状态意味着数据不止存在本地CPU缓存中，还存在别的CPU的缓存中。这个状态的数据和内存中的数据是一致的。当有一个CPU修改该缓存行对应的内存的内容时会使该缓存行变成Invalid状态。
+
 - Modified
 
-参考：[【并发编程】MESI--CPU缓存一致性协议](https://www.cnblogs.com/z00377750/p/9180644.html)
+> 代表该缓存行中的内容被修改了，并且该缓存行只被缓存在该CPU中。这个状态的缓存行中的数据和内存中的不一样，在未来的某个时刻它会被写入到内存中。
+
+
+参考：
+
+[MESI（缓存一致性协议）](https://blog.csdn.net/xiaowenmu1/article/details/89705740)
+
+[【并发编程】MESI--CPU缓存一致性协议](https://www.cnblogs.com/z00377750/p/9180644.html)
+
+
 
 ### 有序性
 
