@@ -36,7 +36,7 @@ public class ThreadVisible {
     }
     private static volatile A a = new A();
     static class A {
-        boolean flag = true;
+        /*volatile*/ boolean flag = true;
         void m() {
             System.out.println("m start");
             while(flag){}
