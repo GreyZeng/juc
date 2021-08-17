@@ -11,6 +11,7 @@ categories:
 - Java
 abbrlink: fea6420c
 date: 2021-04-17 18:11:38
+
 ---
 
 <meta name="referrer" content="no-referrer" />
@@ -302,6 +303,15 @@ Thread.interrupted()
 
 示例代码：ThreadInterrupt.java
 
+## 关于线程的start方法
+
+问题1：反复调用同一个线程的start()方法是否可行？
+
+问题2：假如一个线程执行完毕（此时处于TERMINATED状态），再次调用这个线程的start()方法是否可行？
+
+
+> 两个问题的答案都是不可行，在调用一次start()之后，threadStatus的值会改变（threadStatus !=0），此时再次调用start()方法会抛出IllegalThreadStateException异常。比如，threadStatus为2代表当前线程状态为TERMINATED。
+
 ## 如何结束一个线程
 
 ### 不推荐的方式
@@ -428,45 +438,7 @@ public class ThreadVisible {
 如何来验证CPU读取缓存行这件事，我们可以通过一个示例来说明：
 
 ```java
-public class CacheLinePadding {
-    public static T[] arr = new T[2];
-
-    static {
-        arr[0] = new T();
-        arr[1] = new T();
-    }
-
-    public static void main(String[] args) throws Exception {
-        Thread t1 = new Thread(() -> {
-            for (long i = 0; i < 1000_0000L; i++) {
-                arr[0].x = i;
-            }
-        });
-
-        Thread t2 = new Thread(() -> {
-            for (long i = 0; i < 1000_0000L; i++) {
-                arr[1].x = i;
-            }
-        });
-
-        final long start = System.nanoTime();
-        t1.start();
-        t2.start();
-        t1.join();
-        t2.join();
-        System.out.println((System.nanoTime() - start) / 100_0000);
-    }
-
-    private static class Padding {
-        public volatile long p1, p2, p3, p4, p5, p6, p7;
-    }
-
-    private static class T /**extends Padding*/
-    {
-        public volatile long x = 0L;
-    }
-}
-
+public class CacheLinePadding {    public static T[] arr = new T[2];    static {        arr[0] = new T();        arr[1] = new T();    }    public static void main(String[] args) throws Exception {        Thread t1 = new Thread(() -> {            for (long i = 0; i < 1000_0000L; i++) {                arr[0].x = i;            }        });        Thread t2 = new Thread(() -> {            for (long i = 0; i < 1000_0000L; i++) {                arr[1].x = i;            }        });        final long start = System.nanoTime();        t1.start();        t2.start();        t1.join();        t2.join();        System.out.println((System.nanoTime() - start) / 100_0000);    }    private static class Padding {        public volatile long p1, p2, p3, p4, p5, p6, p7;    }    private static class T /**extends Padding*/    {        public volatile long x = 0L;    }}
 ```
 
 说明：以上代码，T这个类extends Padding与否，会影响整个流程的执行时间，如果继承了，会减少执行时间，因为继承Padding后，arr[0]和arr[1]一定不在同一个缓存行里面，所以不需要同步数据，速度就更快一些了。
