@@ -26,6 +26,7 @@ import java.lang.ref.ReferenceQueue;
 import java.util.LinkedList;
 import java.util.List;
 
+// 配置 -Xms20M -Xmx20M
 public class PhantomRef {
     private static final List<Object> LIST = new LinkedList<>();
     private static final ReferenceQueue<P> QUEUE = new ReferenceQueue<>();
