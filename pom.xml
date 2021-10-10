@@ -9,7 +9,8 @@
     <version>1.0</version>
 
     <name>juc</name>
-    <description>Java多线程学习笔记</description>
+    <description>Java多线程学习代码</description>
+    <url>https://www.cnblogs.com/greyzeng/p/14176141.html</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
