@@ -1,7 +1,6 @@
 package git.snippets.juc;
 
 import com.google.common.util.concurrent.RateLimiter;
-
 import java.util.List;
 import java.util.concurrent.Executor;
 
