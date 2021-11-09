@@ -5,8 +5,8 @@ package git.snippets.juc;
  */
 public class DeadLock implements Runnable {
     int flag = 1;
-    static Object o1 = new Object();
-    static Object o2 = new Object();
+    static final Object o1 = new Object();
+    static final Object o2 = new Object();
 
     public static void main(String[] args) {
         DeadLock lock = new DeadLock();
