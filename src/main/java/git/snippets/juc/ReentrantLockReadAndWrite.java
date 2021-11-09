@@ -39,9 +39,9 @@ public class ReentrantLockReadAndWrite {
     }
 
     public static void main(String[] args) {
-        new Thread(() -> read(), "Thread1").start();
-        new Thread(() -> read(), "Thread2").start();
-        new Thread(() -> write(), "Thread3").start();
-        new Thread(() -> write(), "Thread4").start();
+        new Thread(ReentrantLockReadAndWrite::read, "Thread1").start();
+        new Thread(ReentrantLockReadAndWrite::read, "Thread2").start();
+        new Thread(ReentrantLockReadAndWrite::write, "Thread3").start();
+        new Thread(ReentrantLockReadAndWrite::write, "Thread4").start();
     }
 }
