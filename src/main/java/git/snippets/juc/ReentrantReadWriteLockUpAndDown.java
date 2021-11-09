@@ -10,9 +10,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @since
  */
 public class ReentrantReadWriteLockUpAndDown {
-    private static ReentrantReadWriteLock reentrantLock = new ReentrantReadWriteLock();
-    private static ReentrantReadWriteLock.ReadLock readLock = reentrantLock.readLock();
-    private static ReentrantReadWriteLock.WriteLock writeLock = reentrantLock.writeLock();
+    private static final ReentrantReadWriteLock reentrantLock = new ReentrantReadWriteLock();
+    private static final ReentrantReadWriteLock.ReadLock readLock = reentrantLock.readLock();
+    private static final ReentrantReadWriteLock.WriteLock writeLock = reentrantLock.writeLock();
 
     public static void read() {
         System.out.println(Thread.currentThread().getName() + "开始尝试获取读锁");
@@ -53,7 +53,7 @@ public class ReentrantReadWriteLockUpAndDown {
     }
 
     public static void main(String[] args) {
-        new Thread(() -> write(), "Thread1").start();
-        new Thread(() -> read(), "Thread2").start();
+        new Thread(ReentrantReadWriteLockUpAndDown::write, "Thread1").start();
+        new Thread(ReentrantReadWriteLockUpAndDown::read, "Thread2").start();
     }
 }
