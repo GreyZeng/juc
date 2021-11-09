@@ -9,7 +9,7 @@ public class AddBySynchronized {
 
     public static void main(String[] args) {
         Thread[] all = new Thread[1000];
-        AddBySynchronized t = new AddBySynchronized();
+        //AddBySynchronized t = new AddBySynchronized();
         Object o = new Object();
         for (int i = 0; i < all.length; i++) {
             all[i] = new Thread(new Runnable() {

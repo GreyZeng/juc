@@ -36,7 +36,7 @@ public class AddByLongAdder {
             }
         }
         long end = System.currentTimeMillis();
-        System.out.println("by LongAdder , result is " + t.count.doubleValue() + " time is " + (end - start));
+        System.out.println("by LongAdder , result is " + t.count + " time is " + (end - start));
 
     }
 
