@@ -9,7 +9,7 @@ public class ProducerAndConsumer {
 	public static void main(String[] args) {
 		MyContainerByNotifyAndWait container = new MyContainerByNotifyAndWait(100);
 		for (int i = 0; i < 25; i++) {
-			new Thread(() -> container.get()).start();
+			new Thread(container::get).start();
 		}
 		for (int i = 0; i < 20; i++) {
 			new Thread(() -> container.put(new Object())).start();
