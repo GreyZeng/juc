@@ -6,9 +6,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * ReentrantLock的读锁插队策略
  */
 public class ReentrantLockCut {
-    private static ReentrantReadWriteLock reentrantLock = new ReentrantReadWriteLock();
-    private static ReentrantReadWriteLock.ReadLock readLock = reentrantLock.readLock();
-    private static ReentrantReadWriteLock.WriteLock writeLock = reentrantLock.writeLock();
+    private static final ReentrantReadWriteLock reentrantLock = new ReentrantReadWriteLock();
+    private static final ReentrantReadWriteLock.ReadLock readLock = reentrantLock.readLock();
+    private static final ReentrantReadWriteLock.WriteLock writeLock = reentrantLock.writeLock();
 
     public static void read() {
         System.out.println(Thread.currentThread().getName() + "开始尝试获取读锁");
@@ -39,15 +39,15 @@ public class ReentrantLockCut {
     }
 
     public static void main(String[] args) {
-        new Thread(() -> write(), "Thread1").start();
-        new Thread(() -> read(), "Thread2").start();
-        new Thread(() -> read(), "Thread3").start();
-        new Thread(() -> write(), "Thread4").start();
-        new Thread(() -> read(), "Thread5").start();
+        new Thread(ReentrantLockCut::write, "Thread1").start();
+        new Thread(ReentrantLockCut::read, "Thread2").start();
+        new Thread(ReentrantLockCut::read, "Thread3").start();
+        new Thread(ReentrantLockCut::write, "Thread4").start();
+        new Thread(ReentrantLockCut::read, "Thread5").start();
         new Thread(() -> {
             Thread[] threads = new Thread[1000];
             for (int i = 0; i < 1000; i++) {
-                threads[i] = new Thread(() -> read(), "子线程创建的Thread" + i);
+                threads[i] = new Thread(ReentrantLockCut::read, "子线程创建的Thread" + i);
             }
             for (int i = 0; i < 1000; i++) {
                 threads[i].start();

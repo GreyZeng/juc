@@ -8,9 +8,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  **/
 public class ReentrantLockReadAndWrite {
 
-    private static ReentrantReadWriteLock reentrantLock = new ReentrantReadWriteLock();
-    private static ReentrantReadWriteLock.ReadLock readLock = reentrantLock.readLock();
-    private static ReentrantReadWriteLock.WriteLock writeLock = reentrantLock.writeLock();
+    private static final ReentrantReadWriteLock reentrantLock = new ReentrantReadWriteLock();
+    private static final ReentrantReadWriteLock.ReadLock readLock = reentrantLock.readLock();
+    private static final ReentrantReadWriteLock.WriteLock writeLock = reentrantLock.writeLock();
 
     public static void read() {
         readLock.lock();
