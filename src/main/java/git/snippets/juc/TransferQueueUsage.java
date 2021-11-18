@@ -9,21 +9,21 @@ public class TransferQueueUsage {
 
     public static void main(String[] args) {
         ExecutorService exService = Executors.newFixedThreadPool(2);
-        Producer producer = new TransferQueueUsage().new Producer();
-        Consumer consumer = new TransferQueueUsage().new Consumer();
+        Producer producer = new Producer();
+        Consumer consumer = new Consumer();
         exService.execute(producer);
         exService.execute(consumer);
         exService.shutdown();
     }
 
-    class Producer implements Runnable {
+    static class Producer implements Runnable {
         @Override
         public void run() {
             for (int i = 0; i < 3; i++) {
                 try {
                     System.out.println("Producer is waiting to transfer...");
                     lnkTransQueue.transfer("A" + i);
-                    System.out.println("producer transfered element: A" + i);
+                    System.out.println("producer transferred element: A" + i);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -31,7 +31,7 @@ public class TransferQueueUsage {
         }
     }
 
-    class Consumer implements Runnable {
+    static class Consumer implements Runnable {
         @Override
         public void run() {
             for (int i = 0; i < 3; i++) {
