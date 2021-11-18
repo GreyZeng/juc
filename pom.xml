@@ -8,7 +8,7 @@
     <artifactId>juc</artifactId>
     <version>1.0</version>
 
-    <name>juc</name>
+    <name>${artifactId}</name>
     <description>Java多线程学习代码</description>
     <url>https://www.cnblogs.com/greyzeng/p/14176141.html</url>
     <properties>

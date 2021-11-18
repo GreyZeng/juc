@@ -23,8 +23,7 @@ public class FiberSample {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException, SuspendExecution {
         //定义两个Channel
-        Channel<Integer> naturals = Channels.newChannel(-1);
-        try (Channel<Integer> squares = Channels.newChannel(-1)) {
+        try (Channel<Integer> naturals = Channels.newChannel(-1); Channel<Integer> squares = Channels.newChannel(-1)) {
 
             //运行两个Fiber实现.
             new Fiber(() -> {
@@ -44,5 +43,6 @@ public class FiberSample {
 
             printer(squares);
         }
+
     }
 }
