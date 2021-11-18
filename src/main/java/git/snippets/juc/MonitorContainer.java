@@ -18,30 +18,21 @@ public class MonitorContainer {
         // useNotifyAndWait();
     }
 
-    /**
-     * 使用Semaphore
-     */
-    private static void useSemaphore() {
-        // TODO
-    }
 
     /**
      * 使用LockSupport
      */
     private static void useLockSupport() {
         System.out.println("use LockSupport...");
-        Thread adder = null;
-        Thread monitor;
+        Thread adder;
         List<Object> list = Collections.synchronizedList(new ArrayList<>());
-        Thread finalAdder = adder;
-        monitor = new Thread(() -> {
+        Thread finalMonitor = new Thread(() -> {
             LockSupport.park();
             if (match(list)) {
                 System.out.println("filled 5 elements size is " + list.size());
-                LockSupport.unpark(finalAdder);
+                LockSupport.unpark(null);
             }
         });
-        Thread finalMonitor = monitor;
         adder = new Thread(() -> {
             for (int i = 0; i < 10; i++) {
                 increment(list);
@@ -51,7 +42,7 @@ public class MonitorContainer {
             }
         });
         adder.start();
-        monitor.start();
+        finalMonitor.start();
     }
 
     /**

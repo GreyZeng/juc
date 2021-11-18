@@ -7,7 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 // 写一个固定容量的同步容器，拥有put和get方法，以及getCount方法，能够支持2个生产者线程以及10个消费者线程的阻塞调用。
 public class ProducerAndConsumer {
 	public static void main(String[] args) {
-		MyContainerByNotifyAndWait container = new MyContainerByNotifyAndWait(100);
+		MyContainerByCondition container = new MyContainerByCondition(100);
 		for (int i = 0; i < 25; i++) {
 			new Thread(container::get).start();
 		}
