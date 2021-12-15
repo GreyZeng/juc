@@ -1,3 +1,5 @@
+package git.snippets.dp2src.ThreadPerMessage.jucSample7;
+
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -12,11 +14,7 @@ public class Host {
     public void request(final int count, final char c) {
         System.out.println("    request(" + count + ", " + c + ") BEGIN");
         scheduledExecutorService.schedule(
-            new Runnable() {
-                public void run() {
-                    helper.handle(count, c);
-                }
-            },
+                () -> helper.handle(count, c),
             3L,
             TimeUnit.SECONDS
         );

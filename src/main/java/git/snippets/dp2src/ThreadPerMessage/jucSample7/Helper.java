@@ -1,3 +1,5 @@
+package git.snippets.dp2src.ThreadPerMessage.jucSample7;
+
 public class Helper {
     public void handle(int count, char c) {
         System.out.println("        handle(" + count + ", " + c + ") BEGIN");

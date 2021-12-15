@@ -1,3 +1,5 @@
+package git.snippets.dp2src.ThreadPerMessage.jucSample3;
+
 import java.util.concurrent.ThreadFactory;
 
 public class Host {
@@ -11,11 +13,7 @@ public class Host {
     public void request(final int count, final char c) {
         System.out.println("    request(" + count + ", " + c + ") BEGIN");
         threadFactory.newThread(
-            new Runnable() {
-                public void run() {
-                    helper.handle(count, c);
-                }
-            }
+                () -> helper.handle(count, c)
         ).start();
         System.out.println("    request(" + count + ", " + c + ") END");
     }

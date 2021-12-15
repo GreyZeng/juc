@@ -1,14 +1,12 @@
-import java.util.concurrent.ThreadFactory;
+package git.snippets.dp2src.ThreadPerMessage.jucSample4;
+
+import java.util.concurrent.Executors;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("main BEGIN");
         Host host = new Host(
-            new ThreadFactory() {
-                public Thread newThread(Runnable r) {
-                    return new Thread(r);
-                }
-            }
+            Executors.defaultThreadFactory()
         );
         host.request(10, 'A');
         host.request(20, 'B');

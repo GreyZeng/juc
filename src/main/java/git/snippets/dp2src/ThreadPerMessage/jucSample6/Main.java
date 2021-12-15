@@ -1,3 +1,5 @@
+package git.snippets.dp2src.ThreadPerMessage.jucSample6;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 

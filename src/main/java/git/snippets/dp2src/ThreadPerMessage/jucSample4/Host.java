@@ -1,3 +1,5 @@
+package git.snippets.dp2src.ThreadPerMessage.jucSample4;
+
 import java.util.concurrent.ThreadFactory;
 
 public class Host {
