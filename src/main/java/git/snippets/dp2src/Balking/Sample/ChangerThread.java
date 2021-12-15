@@ -1,3 +1,5 @@
+package git.snippets.dp2src.Balking.Sample;
+
 import java.io.IOException;
 import java.util.Random;
 
@@ -11,9 +13,9 @@ public class ChangerThread extends Thread {
     public void run() {
         try {
             for (int i = 0; true; i++) {
-                data.change("No." + i);             // ƒf[ƒ^‚ğ•ÏX‚·‚é
-                Thread.sleep(random.nextInt(1000)); // d–‚Ì‚Â‚à‚è
-                data.save();                        // –¾¦“I‚É•Û‘¶‚·‚é
+                data.change("No." + i);             // ï¿½fï¿½[ï¿½^ï¿½ï¿½ÏXï¿½ï¿½ï¿½ï¿½
+                Thread.sleep(random.nextInt(1000)); // ï¿½dï¿½ï¿½ï¿½Ì‚Â‚ï¿½ï¿½ï¿½
+                data.save();                        // ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½É•Û‘ï¿½ï¿½ï¿½ï¿½ï¿½
             }
         } catch (IOException e) {
             e.printStackTrace();

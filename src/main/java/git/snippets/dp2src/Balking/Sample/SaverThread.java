@@ -1,3 +1,5 @@
+package git.snippets.dp2src.Balking.Sample;
+
 import java.io.IOException;
 
 public class SaverThread extends Thread {
@@ -9,8 +11,8 @@ public class SaverThread extends Thread {
     public void run() {
         try {
             while (true) {
-                data.save();            // ƒf[ƒ^‚ğ•Û‘¶‚µ‚æ‚¤‚Æ‚·‚é
-                Thread.sleep(1000);     // –ñ1•b‹x‚Ş
+                data.save();            // ï¿½fï¿½[ï¿½^ï¿½ï¿½Û‘ï¿½ï¿½ï¿½ï¿½æ‚¤ï¿½Æ‚ï¿½ï¿½ï¿½
+                Thread.sleep(1000);     // ï¿½ï¿½1ï¿½bï¿½xï¿½ï¿½
             }
         } catch (IOException e) {
             e.printStackTrace();
