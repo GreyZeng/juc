@@ -1,13 +1,17 @@
+package git.snippets.dp2src.WorkerThread.Sample;
+
 import java.util.Random;
 
 public class Request {
-    private final String name; // 依頼者
-    private final int number;  // リクエストの番号
+    private final String name;
+    private final int number;
     private static final Random random = new Random();
+
     public Request(String name, int number) {
         this.name = name;
         this.number = number;
     }
+
     public void execute() {
         System.out.println(Thread.currentThread().getName() + " executes " + this);
         try {
@@ -15,6 +19,7 @@ public class Request {
         } catch (InterruptedException e) {
         }
     }
+
     public String toString() {
         return "[ Request from " + name + " No." + number + " ]";
     }

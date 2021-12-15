@@ -1,6 +1,8 @@
+package git.snippets.dp2src.WorkerThread.Sample;
+
 public class Main {
     public static void main(String[] args) {
-        Channel channel = new Channel(5);   // ワーカースレッドの個数
+        Channel channel = new Channel(5);
         channel.startWorkers();
         new ClientThread("Alice", channel).start();
         new ClientThread("Bobby", channel).start();

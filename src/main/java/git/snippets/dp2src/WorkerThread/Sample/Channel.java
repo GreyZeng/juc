@@ -1,9 +1,11 @@
+package git.snippets.dp2src.WorkerThread.Sample;
+
 public class Channel {
     private static final int MAX_REQUEST = 100;
     private final Request[] requestQueue;
-    private int tail;  // Ÿ‚ÉputRequest‚·‚éêŠ
-    private int head;  // Ÿ‚ÉtakeRequest‚·‚éêŠ
-    private int count; // Request‚Ì”
+    private int tail;
+    private int head;
+    private int count;
 
     private final WorkerThread[] threadPool;
 
@@ -18,11 +20,13 @@ public class Channel {
             threadPool[i] = new WorkerThread("Worker-" + i, this);
         }
     }
+
     public void startWorkers() {
-        for (int i = 0; i < threadPool.length; i++) {
-            threadPool[i].start();
+        for (WorkerThread workerThread : threadPool) {
+            workerThread.start();
         }
     }
+
     public synchronized void putRequest(Request request) {
         while (count >= requestQueue.length) {
             try {
@@ -35,6 +39,7 @@ public class Channel {
         count++;
         notifyAll();
     }
+
     public synchronized Request takeRequest() {
         while (count <= 0) {
             try {
