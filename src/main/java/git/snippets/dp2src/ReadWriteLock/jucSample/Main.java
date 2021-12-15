@@ -1,3 +1,5 @@
+package git.snippets.dp2src.ReadWriteLock.jucSample;
+
 public class Main {
     public static void main(String[] args) {
         Data data = new Data(10);

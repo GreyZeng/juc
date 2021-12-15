@@ -1,3 +1,5 @@
+package git.snippets.dp2src.ReadWriteLock.jucSample;
+
 import java.util.Random;
 
 public class WriterThread extends Thread {
@@ -5,21 +7,25 @@ public class WriterThread extends Thread {
     private final Data data;
     private final String filler;
     private int index = 0;
+
     public WriterThread(Data data, String filler) {
         this.data = data;
         this.filler = filler;
     }
+
+    @Override
     public void run() {
         try {
             while (true) {
-                char c = nextchar();
+                char c = nextChar();
                 data.write(c);
                 Thread.sleep(random.nextInt(3000));
             }
         } catch (InterruptedException e) {
         }
     }
-    private char nextchar() {
+
+    private char nextChar() {
         char c = filler.charAt(index);
         index++;
         if (index >= filler.length()) {
