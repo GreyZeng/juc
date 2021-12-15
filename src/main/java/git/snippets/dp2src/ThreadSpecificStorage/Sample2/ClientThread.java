@@ -1,3 +1,5 @@
+package git.snippets.dp2src.ThreadSpecificStorage.Sample2;
+
 public class ClientThread extends Thread {
     public ClientThread(String name) {
         super(name);
