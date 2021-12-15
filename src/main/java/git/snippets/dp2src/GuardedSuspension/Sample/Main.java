@@ -1,3 +1,6 @@
+package git.snippets.dp2src.GuardedSuspension.Sample;
+
+// 实现BlockingQueue
 public class Main {
     public static void main(String[] args) {
         RequestQueue requestQueue = new RequestQueue();

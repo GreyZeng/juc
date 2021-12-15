@@ -1,3 +1,5 @@
+package git.snippets.dp2src.GuardedSuspension.Sample;
+
 import java.util.Queue;
 import java.util.LinkedList;
 

@@ -1,3 +1,5 @@
+package git.snippets.dp2src.GuardedSuspension.Sample;
+
 public class Request {
     private final String name;
     public Request(String name) {
