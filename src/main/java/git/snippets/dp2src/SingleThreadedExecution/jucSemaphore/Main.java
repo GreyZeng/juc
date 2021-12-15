@@ -1,3 +1,5 @@
+package git.snippets.dp2src.SingleThreadedExecution.jucSemaphore;
+
 import java.util.Random;
 
 import java.util.concurrent.Semaphore;
@@ -8,19 +10,16 @@ class Log {
     }
 }
 
-// 数の制限があるリソース
 class BoundedResource {
     private final Semaphore semaphore;
     private final int permits;
     private final static Random random = new Random(314159);
 
-    // コンストラクタ(permitsはリソースの個数)
     public BoundedResource(int permits) {
         this.semaphore = new Semaphore(permits);
         this.permits = permits;
     }
 
-    // リソースを使用する
     public void use() throws InterruptedException {
         semaphore.acquire();
         try {
@@ -30,7 +29,6 @@ class BoundedResource {
         }
     }
 
-    // リソースを実際に使用する(ここではThread.sleepしているだけ)
     protected void doUse() throws InterruptedException {
         Log.println("BEGIN: used = " + (permits - semaphore.availablePermits()));
         Thread.sleep(random.nextInt(500));
@@ -38,8 +36,7 @@ class BoundedResource {
     }
 }
 
-// リソースを利用するスレッド
-class UserThread extends Thread {
+class UserThread implements Runnable {
     private final static Random random = new Random(26535);
     private final BoundedResource resource;
 
@@ -47,6 +44,8 @@ class UserThread extends Thread {
         this.resource = resource;
     }
 
+
+    @Override
     public void run() {
         try {
             while (true) {
@@ -60,12 +59,10 @@ class UserThread extends Thread {
 
 public class Main {
     public static void main(String[] args) {
-        // 3個のリソースを用意する
         BoundedResource resource = new BoundedResource(3);
 
-        // 10個のスレッドが利用する
         for (int i = 0; i < 10; i++) {
-            new UserThread(resource).start();
+            new Thread(new UserThread(resource)).start();
         }
     }
 }
