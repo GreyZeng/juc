@@ -1,3 +1,5 @@
+package git.snippets.dp2src.Future.Sample;
+
 public class FutureData implements Data {
     private RealData realdata = null;
     private boolean ready = false;

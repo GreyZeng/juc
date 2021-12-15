@@ -1,3 +1,5 @@
+package git.snippets.dp2src.Future.jucSample;
+
 public class RealData implements Data {
     private final String content;
     public RealData(int count, char c) {

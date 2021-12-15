@@ -1,3 +1,5 @@
+package git.snippets.dp2src.Future.jucSample;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.ExecutionException;
