@@ -1,6 +1,5 @@
 package git.snippets.juc;
 
-import git.snippets.dp2src.introduction1.jucThreadFactory.Main;
 
 /**
  * 检查当前线程是否持有某个锁
