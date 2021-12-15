@@ -1,3 +1,5 @@
+package git.snippets.dp2src.TwoPhaseTermination.jucSample1;
+
 import java.util.Random;
 
 import java.util.concurrent.CountDownLatch;
