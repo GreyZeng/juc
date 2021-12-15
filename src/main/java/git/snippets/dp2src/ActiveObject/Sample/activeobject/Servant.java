@@ -1,4 +1,4 @@
-package activeobject;
+package git.snippets.dp2src.ActiveObject.Sample.activeobject;
 
 class Servant implements ActiveObject {
     public Result<String> makeString(int count, char fillchar) {

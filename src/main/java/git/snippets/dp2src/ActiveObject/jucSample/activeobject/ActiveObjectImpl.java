@@ -1,22 +1,18 @@
-package activeobject;
+package git.snippets.dp2src.ActiveObject.jucSample.activeobject;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
-// ActiveObjectインタフェースの実装クラス
 class ActiveObjectImpl implements ActiveObject {
     private final ExecutorService service = Executors.newSingleThreadExecutor();
 
-    // サービスの終了
     public void shutdown() {
         service.shutdown();
     }
 
-    // 戻り値のある呼び出し
     public Future<String> makeString(final int count, final char fillchar) {
-        // リクエスト
         class MakeStringRequest implements Callable<String> {
             public String call() {
                 char[] buffer = new char[count];
@@ -30,13 +26,10 @@ class ActiveObjectImpl implements ActiveObject {
                 return new String(buffer);
             }
         }
-        // リクエストの発行
         return service.submit(new MakeStringRequest());
     }
 
-    // 戻り値のない呼び出し
     public void displayString(final String string) {
-        // リクエスト
         class DisplayStringRequest implements Runnable {
             public void run() {
                 try {
@@ -46,7 +39,6 @@ class ActiveObjectImpl implements ActiveObject {
                 }
             }
         }
-        // リクエストの発行
         service.execute(new DisplayStringRequest());
     }
 }

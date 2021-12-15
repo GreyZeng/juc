@@ -1,5 +1,8 @@
-import activeobject.ActiveObject;
-import activeobject.ActiveObjectFactory;
+package git.snippets.dp2src.ActiveObject.jucSample;
+
+
+import git.snippets.dp2src.ActiveObject.jucSample.activeobject.ActiveObject;
+import git.snippets.dp2src.ActiveObject.jucSample.activeobject.ActiveObjectFactory;
 
 public class Main {
     public static void main(String[] args) {

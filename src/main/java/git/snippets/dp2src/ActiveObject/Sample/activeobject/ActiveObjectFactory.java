@@ -1,4 +1,4 @@
-package activeobject;
+package git.snippets.dp2src.ActiveObject.Sample.activeobject;
 
 public class ActiveObjectFactory {
     public static ActiveObject createActiveObject() {

@@ -1,4 +1,4 @@
-package activeobject;
+package git.snippets.dp2src.ActiveObject.Sample.activeobject;
 
 class DisplayStringRequest extends MethodRequest<Object> {
     private final String string;

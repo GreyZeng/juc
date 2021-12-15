@@ -1,4 +1,4 @@
-package activeobject;
+package git.snippets.dp2src.ActiveObject.Sample.activeobject;
 
 class FutureResult<T> extends Result<T> {
     private Result<T> result;

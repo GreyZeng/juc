@@ -1,11 +1,11 @@
-package activeobject;
+package git.snippets.dp2src.ActiveObject.Sample.activeobject;
 
 class ActivationQueue {
     private static final int MAX_METHOD_REQUEST = 100;
     private final MethodRequest[] requestQueue;
-    private int tail;  // Ÿ‚ÉputRequest‚·‚éêŠ
-    private int head;  // Ÿ‚ÉtakeRequest‚·‚éêŠ
-    private int count; // MethodRequest‚Ì”
+    private int tail;
+    private int head;
+    private int count;
 
     public ActivationQueue() {
         this.requestQueue = new MethodRequest[MAX_METHOD_REQUEST];

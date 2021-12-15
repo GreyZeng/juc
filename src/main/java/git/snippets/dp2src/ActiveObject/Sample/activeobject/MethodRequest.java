@@ -1,4 +1,4 @@
-package activeobject;
+package git.snippets.dp2src.ActiveObject.Sample.activeobject;
 
 abstract class MethodRequest<T> {
     protected final Servant servant;

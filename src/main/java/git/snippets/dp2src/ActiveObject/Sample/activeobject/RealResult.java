@@ -1,4 +1,4 @@
-package activeobject;
+package git.snippets.dp2src.ActiveObject.Sample.activeobject;
 
 class RealResult<T> extends Result<T> {
     private final T resultValue;
