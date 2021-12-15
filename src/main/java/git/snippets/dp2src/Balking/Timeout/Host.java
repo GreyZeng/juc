@@ -1,25 +1,26 @@
+package git.snippets.dp2src.Balking.Timeout;
+
 import java.util.concurrent.TimeoutException;
 
 public class Host {
-    private final long timeout; // ƒ^ƒCƒ€ƒAƒEƒg’l
-    private boolean ready = false; // ƒƒ\ƒbƒhÀs‚µ‚Ä‚æ‚¢‚È‚çtrue
+    private final long timeout;
+    private boolean ready = false;
 
     public Host(long timeout) {
         this.timeout = timeout;
     }
 
-    // ó‘Ô‚Ì•ÏX‚ğ‚·‚é
+    // ï¿½ï¿½Ô‚Ì•ÏXï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public synchronized void setExecutable(boolean on) {
         ready = on;
         notifyAll();
     }
 
-    // ó‘Ô‚ğl‚¦‚½ã‚ÅÀs‚·‚é
     public synchronized void execute() throws InterruptedException, TimeoutException {
-        long start = System.currentTimeMillis(); // ŠJn
+        long start = System.currentTimeMillis();
         while (!ready) {
-            long now = System.currentTimeMillis(); // Œ»İ
-            long rest = timeout - (now - start); // c‚è‚Ì‘Ò‚¿ŠÔ
+            long now = System.currentTimeMillis();
+            long rest = timeout - (now - start);
             if (rest <= 0) {
                 throw new TimeoutException("now - start = " + (now - start) + ", timeout = " + timeout);
             }
@@ -28,7 +29,6 @@ public class Host {
         doExecute();
     }
 
-    // ÀÛ‚Ìˆ—
     private void doExecute() {
         System.out.println(Thread.currentThread().getName() + " calls doExecute");
     }

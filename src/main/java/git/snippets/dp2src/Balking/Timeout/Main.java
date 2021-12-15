@@ -1,3 +1,5 @@
+package git.snippets.dp2src.Balking.Timeout;
+
 import java.util.concurrent.TimeoutException;
 
 public class Main {
