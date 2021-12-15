@@ -1,8 +1,10 @@
+package git.snippets.dp2src.ProducerConsumer.jucSample2;
+
 import java.util.concurrent.Exchanger;
 
 public class Main {
     public static void main(String[] args) {
-        Exchanger<char[]> exchanger = new Exchanger<char[]>();
+        Exchanger<char[]> exchanger = new Exchanger<>();
         char[] buffer1 = new char[10];
         char[] buffer2 = new char[10];
         new ProducerThread(exchanger, buffer1, 314159).start();

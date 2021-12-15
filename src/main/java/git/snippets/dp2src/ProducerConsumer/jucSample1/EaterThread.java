@@ -1,13 +1,17 @@
+package git.snippets.dp2src.ProducerConsumer.jucSample1;
+
 import java.util.Random;
 
 public class EaterThread extends Thread {
     private final Random random;
     private final Table table;
+
     public EaterThread(String name, Table table, long seed) {
         super(name);
         this.table = table;
         this.random = new Random(seed);
     }
+
     public void run() {
         try {
             while (true) {

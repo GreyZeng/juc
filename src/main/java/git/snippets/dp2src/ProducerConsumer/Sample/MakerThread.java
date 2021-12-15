@@ -1,9 +1,11 @@
+package git.snippets.dp2src.ProducerConsumer.Sample;
+
 import java.util.Random;
 
 public class MakerThread extends Thread {
     private final Random random;
     private final Table table;
-    private static int id = 0; // ケーキの通し番号(コックさん全員共通)
+    private static int id = 0;
     public MakerThread(String name, Table table, long seed) {
         super(name);
         this.table = table;
