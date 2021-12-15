@@ -1,3 +1,5 @@
+package git.snippets.dp2src.WorkerThread.jucSample;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 
@@ -10,7 +12,6 @@ public class Main {
             new ClientThread("Bobby", executorService).start();
             new ClientThread("Chris", executorService).start();
 
-            // –ñ5•b‘Ò‚Â
             Thread.sleep(5000);
         } catch (InterruptedException e) {
         } finally {

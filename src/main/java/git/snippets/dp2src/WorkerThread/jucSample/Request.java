@@ -1,8 +1,10 @@
+package git.snippets.dp2src.WorkerThread.jucSample;
+
 import java.util.Random;
 
 public class Request implements Runnable {
-    private final String name; // ˆË—ŠÒ
-    private final int number;  // ƒŠƒNƒGƒXƒg‚Ì”Ô†
+    private final String name; // ï¿½Ë—ï¿½ï¿½ï¿½
+    private final int number;  // ï¿½ï¿½ï¿½Nï¿½Gï¿½Xï¿½gï¿½Ì”Ôï¿½
     private static final Random random = new Random();
     public Request(String name, int number) {
         this.name = name;
