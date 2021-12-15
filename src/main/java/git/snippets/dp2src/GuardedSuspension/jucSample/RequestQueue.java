@@ -1,8 +1,11 @@
+package git.snippets.dp2src.GuardedSuspension.jucSample;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class RequestQueue {
-    private final BlockingQueue<Request> queue = new LinkedBlockingQueue<Request>();
+    private final BlockingQueue<Request> queue = new LinkedBlockingQueue<>();
+
     public Request getRequest() {
         Request req = null;
         try {
@@ -11,6 +14,7 @@ public class RequestQueue {
         }
         return req;
     }
+
     public void putRequest(Request request) {
         try {
             queue.put(request);
