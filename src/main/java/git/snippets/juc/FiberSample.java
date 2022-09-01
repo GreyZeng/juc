@@ -9,6 +9,11 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * Java协程示例
+ * JDK 11 ~ JDK 15 没问题，
+ *
+ * JDK 16 开始，需要增加如下参数
+ *
+ * --add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED
  *
  * @since jdk11
  * 需要引入：quasar-core依赖包
