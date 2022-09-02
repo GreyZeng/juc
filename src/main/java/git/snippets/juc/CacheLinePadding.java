@@ -33,6 +33,7 @@ public class CacheLinePadding {
         t1.join();
         t2.join();
         System.out.println((System.nanoTime() - start) / 100_0000);
+        System.out.println("arr[0]=" + arr[0].x + " arr[1]=" + arr[1].x);
     }
 
     private static class Padding {
@@ -41,7 +42,7 @@ public class CacheLinePadding {
 
     // T这个类extends Padding与否，会影响整个流程的执行时间，如果继承了，会减少执行时间，
     // 因为继承Padding后，arr[0]和arr[1]一定不在同一个缓存行里面，所以不需要同步数据，速度就更快一些了。
-    private static class T extends Padding {
+    private static class T /*extends Padding*/ {
         public volatile long x = 0L;
     }
 }

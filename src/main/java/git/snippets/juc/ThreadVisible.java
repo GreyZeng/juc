@@ -1,8 +1,6 @@
 package git.snippets.juc;
 
 
-import java.io.IOException;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -17,13 +15,14 @@ public class ThreadVisible {
 
     public static void main(String[] args) throws Exception {
         Thread t = new Thread(() -> {
+            System.out.println(Thread.currentThread() + " t start");
             while (flag) {
                 // 如果这里调用了System.out.println()
                 // 会无论flag有没有加volatile,数据都会同步
                 // 因为System.out.println()背后调用的synchronized
                 // System.out.println();
             }
-            System.out.println("t end");
+            System.out.println(Thread.currentThread() + " t end");
         });
         t.start();
         TimeUnit.SECONDS.sleep(3);
@@ -42,7 +41,7 @@ public class ThreadVisible {
     private static volatile A a = new A();
 
     static class A {
-        /* volatile */ boolean flag = true;
+        volatile boolean flag = true;
 
         void m() {
             System.out.println("m start");
