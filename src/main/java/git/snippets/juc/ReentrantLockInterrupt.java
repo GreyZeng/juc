@@ -3,10 +3,10 @@ package git.snippets.juc;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock; 
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ReentrantLockInterrupt {
-	static ReentrantLock lock = new ReentrantLock();
+    static ReentrantLock lock = new ReentrantLock();
 
     public static void main(String[] args) {
         Thread t1 = new Thread(() -> {

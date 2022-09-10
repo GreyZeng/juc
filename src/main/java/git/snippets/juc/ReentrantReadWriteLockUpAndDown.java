@@ -5,6 +5,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 /**
  * 读锁无法升级为写锁
  * 写锁可以降级成读锁
+ *
  * @author <a href="mailto:410486047@qq.com">Grey</a>
  * @date 2021/4/21
  * @since
@@ -20,10 +21,10 @@ public class ReentrantReadWriteLockUpAndDown {
         try {
             System.out.println(Thread.currentThread().getName() + "获取读锁，开始执行");
             Thread.sleep(20);
-            System.out.println(Thread.currentThread().getName()+ "尝试升级读锁为写锁");
+            System.out.println(Thread.currentThread().getName() + "尝试升级读锁为写锁");
             //读锁升级为写锁(失败)
             writeLock.lock();
-            System.out.println(Thread.currentThread().getName() +"读锁升级为写锁成功");
+            System.out.println(Thread.currentThread().getName() + "读锁升级为写锁成功");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -38,10 +39,10 @@ public class ReentrantReadWriteLockUpAndDown {
         try {
             System.out.println(Thread.currentThread().getName() + "获取写锁，开始执行");
             Thread.sleep(40);
-            System.out.println(Thread.currentThread().getName() +"尝试降级写锁为读锁");
+            System.out.println(Thread.currentThread().getName() + "尝试降级写锁为读锁");
             //写锁降级为读锁（成功）
             readLock.lock();
-            System.out.println(Thread.currentThread().getName()+ "写锁降级为读锁成功");
+            System.out.println(Thread.currentThread().getName() + "写锁降级为读锁成功");
             System.out.println();
         } catch (Exception e) {
             e.printStackTrace();

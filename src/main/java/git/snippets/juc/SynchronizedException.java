@@ -35,6 +35,7 @@ public class SynchronizedException implements Runnable {
                 System.out.println("current thread is " + Thread.currentThread().getName() + " count is " + count);
                 if (count == 5) {
                     count++;
+                    // 遇到异常，synchronized 会自动释放锁
                     int m = 1 / 0;
                 }
                 count++;

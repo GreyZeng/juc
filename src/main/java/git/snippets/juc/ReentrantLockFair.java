@@ -2,13 +2,13 @@ package git.snippets.juc;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
-import java.util.concurrent.locks.ReentrantLock; 
+import java.util.concurrent.locks.ReentrantLock;
 
-public class ReentrantLockFair extends Thread{
-	static ReentrantLock lock = new ReentrantLock(true/*false*/);
+public class ReentrantLockFair extends Thread {
+    static ReentrantLock lock = new ReentrantLock(true/*false*/);
 
     public static void main(String[] args) {
-    	ReentrantLockFair tl = new ReentrantLockFair();
+        ReentrantLockFair tl = new ReentrantLockFair();
         Thread t1 = new Thread(tl);
         Thread t2 = new Thread(tl);
         t1.start();
