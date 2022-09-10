@@ -2,7 +2,7 @@ package git.snippets.juc;
 
 /**
  * synchronized不能锁定String常量，Integer，Long等基础类型
- *
+ * <p>
  * 不要以字符串常量作为锁定对象
  * 在下面的例子中，m1和m2其实锁定的是同一个对象
  * 这种情况还会发生比较诡异的现象，比如你用到了一个类库，在该类库中代码锁定了字符串“Hello”，
@@ -17,8 +17,9 @@ public class SynchronizedBasicType implements Runnable {
     static SynchronizedBasicType instance = new SynchronizedBasicType();
     static final String lock = "this is a lock";
     static final String lock1 = "this is a lock";
+
     public static void main(String[] args) throws InterruptedException {
-    	m();
+        m();
         Thread t1 = new Thread(instance);
         Thread t2 = new Thread(instance);
         t1.start();
@@ -27,8 +28,9 @@ public class SynchronizedBasicType implements Runnable {
         t2.join();
         System.out.println(i);
     }
+
     public static void m() throws InterruptedException {
-    	Thread m1 = new Thread(new Runnable() {
+        Thread m1 = new Thread(new Runnable() {
             @Override
             public void run() {
                 /*synchronized (this)*/
@@ -42,7 +44,7 @@ public class SynchronizedBasicType implements Runnable {
                 }
             }
         });
-    	m1.start();
+        m1.start();
         Thread.sleep(1000);
         Thread m2 = new Thread(new Runnable() {
             @Override
@@ -58,6 +60,7 @@ public class SynchronizedBasicType implements Runnable {
         m1.join();
         m2.join();
     }
+
     @Override
     public void run() {
         for (int j = 0; j < 10000000; j++) {
