@@ -32,8 +32,8 @@ public class CopyOnWriteListVSVector {
     }
 
     public static void main(String[] args) {
-        useCopyOnWriteList();
         useVector();
+        useCopyOnWriteList();
     }
 
     public static void useCopyOnWriteList() {

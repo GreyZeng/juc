@@ -8,15 +8,27 @@ import java.util.concurrent.SynchronousQueue;
  */
 public class SynchronousQueueUsage {
     public static void main(String[] args) throws InterruptedException {
-        SynchronousQueue<String> queue = new SynchronousQueue<>();
-        new Thread(() -> {
+        final SynchronousQueue<Integer> queue = new SynchronousQueue<>();
+
+        Thread producer = new Thread(() -> {
+            System.out.println("put thread start");
             try {
-                System.out.println(queue.take());
+                queue.put(1);
             } catch (InterruptedException e) {
-                e.printStackTrace();
             }
-        }).start();
-        queue.put("aa");
-        System.out.println(queue.size());
+            System.out.println("put thread end");
+        });
+
+        Thread consumer = new Thread(() -> {
+            System.out.println("take thread start");
+            try {
+                System.out.println("take from putThread: " + queue.take());
+            } catch (InterruptedException e) {
+            }
+            System.out.println("take thread end");
+        });
+        producer.start();
+        Thread.sleep(1000);
+        consumer.start();
     }
 }
