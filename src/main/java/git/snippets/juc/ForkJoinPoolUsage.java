@@ -9,7 +9,7 @@ import java.util.stream.LongStream;
 /**
  * @author <a href="mailto:410486047@qq.com">Grey</a>
  * @date 2021/4/25
- * @since
+ * @since 1.7
  */
 public class ForkJoinPoolUsage implements Calculator {
     private ForkJoinPool pool;

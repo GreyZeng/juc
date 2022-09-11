@@ -8,6 +8,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @since 1.8
+ */
 public class WorkStealingPoolUsage {
     public static void main(String[] args) throws IOException {
         int core = Runtime.getRuntime().availableProcessors();

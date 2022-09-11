@@ -4,8 +4,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-
 public class CachedThreadPoolUsage {
     public static void main(String[] args) throws InterruptedException {
         System.out.println("cached thread pool usage...");
@@ -22,12 +20,10 @@ public class CachedThreadPoolUsage {
             });
         }
         System.out.println(service);
-
         TimeUnit.SECONDS.sleep(80);
-
         System.out.println(service);
 
     }
 
- 
+
 }

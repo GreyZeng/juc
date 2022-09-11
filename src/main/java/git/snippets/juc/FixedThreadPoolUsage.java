@@ -2,7 +2,12 @@ package git.snippets.juc;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 多线程和单线程计算某个范围内的所有素数
@@ -66,7 +71,7 @@ public class FixedThreadPoolUsage {
         }
 
         @Override
-        public List<Integer> call() throws Exception {
+        public List<Integer> call() {
             List<Integer> r = getPrime(startPos, endPos);
             return r;
         }
