@@ -1,21 +1,13 @@
 package git.snippets.juc;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.locks.StampedLock;
 import java.util.logging.Logger;
 
 // 乐观写
 public class StampedLockOptimistic {
     private static final Logger log = Logger.getLogger(StampedLockOptimistic.class.getName());
-
-
     private static final StampedLock lock = new StampedLock();
-
-
     private static int num1 = 1;
-
-
     private static int num2 = 1;
 
     /**

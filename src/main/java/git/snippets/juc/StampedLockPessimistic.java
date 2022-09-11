@@ -7,14 +7,11 @@ import java.util.logging.Logger;
 
 // 悲观读 + 写锁
 public class StampedLockPessimistic {
+
     private static final Logger log = Logger.getLogger(StampedLockPessimistic.class.getName());
-
-
     private static final StampedLock lock = new StampedLock();
-
     //缓存中存储的数据
     private static final Map<String, String> mapCache = new HashMap<>();
-
     //模拟数据库存储的数据
     private static final Map<String, String> mapDb = new HashMap<>();
 
@@ -69,20 +66,17 @@ public class StampedLockPessimistic {
     }
 
     public static void main(String[] args) {
-//线程1
+        //线程1
         Thread t1 = new Thread(() -> {
             getInfo("zhangsan");
         });
-
         //线程2
         Thread t2 = new Thread(() -> {
             getInfo("lisi");
         });
-
         //线程启动
         t1.start();
         t2.start();
-
         //线程同步
         try {
             t1.join();
@@ -90,8 +84,6 @@ public class StampedLockPessimistic {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-
     }
 
 }

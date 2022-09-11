@@ -50,11 +50,14 @@ public class PhaserUsage {
             }
         }
     }
+
     static class Person implements Runnable {
         String name;
+
         Person(String name) {
             this.name = name;
         }
+
         @Override
         public void run() {
             // 先到达婚礼现场
@@ -66,21 +69,25 @@ public class PhaserUsage {
             // 拥抱，只保留新郎和新娘两个线程可以执行
             hug();
         }
+
         private void arrive() {
             millSleep();
             System.out.println("name:" + name + " 到来");
             phaser.arriveAndAwaitAdvance();
         }
+
         private void eat() {
             millSleep();
             System.out.println("name:" + name + " 吃饭");
             phaser.arriveAndAwaitAdvance();
         }
+
         private void leave() {
             millSleep();
             System.out.println("name:" + name + " 离开");
             phaser.arriveAndAwaitAdvance();
         }
+
         private void hug() {
             if ("新娘".equals(name) || "新郎".equals(name)) {
                 millSleep();
