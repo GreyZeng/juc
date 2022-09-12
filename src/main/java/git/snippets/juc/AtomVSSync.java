@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 证明原子操作类比synchronized更高效
- *
+ * 使用累加方式测试
  * @author <a href="mailto:410486047@qq.com">Grey</a>
  * @date 2021/4/26
  */
