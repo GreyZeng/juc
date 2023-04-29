@@ -6,16 +6,19 @@
 
     <groupId>git.snippet</groupId>
     <artifactId>juc</artifactId>
-    <version>1.0</version>
+    <version>2.0.RELEASE</version>
 
     <name>${artifactId}</name>
     <description>Java多线程学习代码</description>
     <url>https://www.cnblogs.com/greyzeng/p/14176141.html</url>
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.compilerVersion>${java.version}</maven.compiler.compilerVersion>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <project.build.sourceEncoding>${maven.compiler.encoding}</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>${maven.compiler.encoding}</project.reporting.outputEncoding>
     </properties>
     <dependencies>
         <dependency>
